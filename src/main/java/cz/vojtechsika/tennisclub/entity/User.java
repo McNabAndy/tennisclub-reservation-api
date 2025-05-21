@@ -22,8 +22,8 @@ public class User {
     @Column(name= "phone_number", nullable = false, unique = true)  // zvážit validaci nechat jen čísla
     private String phoneNumber;
 
-    @Column(name= "name", nullable = false)
-    private String name;
+    @Column(name= "user_name", nullable = false)
+    private String userName;
 
     @Column(name= "deleted", nullable = false)
     private boolean deleted;

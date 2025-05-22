@@ -15,6 +15,7 @@ import java.util.List;
 public class ReservationDAOImpl implements ReservationDAO {
 
     // @Trnsactional budu řešit na urovni servisn vrstvi - nezapomenout
+    // pořešit u find metod zda by nemeli vracet raději Optional aby mi metoda nespadla
 
 
     private EntityManager entityManager;

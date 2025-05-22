@@ -17,5 +17,5 @@ public interface ReservationDAO {
 
     List<Reservation> findAllByPhoneNumber(String phoneNumber, boolean futureOnly);
 
-    Reservation update(Reservation reservation);
+    Reservation update(Reservation reservation);;
 }

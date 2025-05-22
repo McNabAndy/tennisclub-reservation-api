@@ -1,5 +1,6 @@
 package cz.vojtechsika.tennisclub.service;
 
+import cz.vojtechsika.tennisclub.dao.CourtDAO;
 import cz.vojtechsika.tennisclub.dao.ReservationDAO;
 import cz.vojtechsika.tennisclub.dao.UserDAO;
 import cz.vojtechsika.tennisclub.dto.ReservationDTO;
@@ -17,7 +18,6 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,17 +28,22 @@ public class ReservationServiceImpl implements ReservationService {
 
     private UserDAO userDAO;
 
+    private CourtDAO courtDAO;
+
     private ReservationMapper reservationMapper;
 
     private UserMapper userMapper;
 
+
     @Autowired
     public ReservationServiceImpl(ReservationDAO theReservationDAO,
                                   UserDAO theUserDAO,
+                                  CourtDAO theCourtDAO,
                                   ReservationMapper theReservationMapper,
                                   UserMapper theUserMapper) {
         reservationDAO = theReservationDAO;
         userDAO = theUserDAO;
+        courtDAO = theCourtDAO;
         reservationMapper = theReservationMapper;
         userMapper = theUserMapper;
 
@@ -49,14 +54,13 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ReservationResponseDTO createReservation(ReservationDTO reservationDTO) {
-
+        // Ověření rezervací když je validní začne to nastavovat další atributy
         List<Reservation> reservations = reservationDAO.findAllByDate(reservationDTO.getStartTime());
-
-
         if (isValidReservation(reservationDTO.getStartTime(), reservationDTO.getEndTime(), reservations)){
 
             Reservation reservation = reservationMapper.toReservationEntity(reservationDTO);
 
+            // Najít uživatele dle telefonu a uložit jej pokud neexistuje vytvořit ho a uložit
             Optional<User> optionalUser = userDAO.findByPhone(reservationDTO.getPhoneNumber());
 
             if (optionalUser.isPresent()){
@@ -66,35 +70,26 @@ public class ReservationServiceImpl implements ReservationService {
                 reservation.setUser(newUser);
             }
 
+            // najít kurt dle čísla uložit jej do rezervace a vypočítat cenu za tento kurt
             Optional<Court> optionalCourt = courtDAO.findByCourtNumber(reservationDTO.getCourtNumber());
+            if (optionalCourt.isPresent()){
+                Court court = optionalCourt.get();
 
+                BigDecimal pricePerMinute = court.getSurfaceType().getMinutePrice();
+                Long minutes = getDurationInMinutes(reservationDTO.getStartTime(), reservationDTO.getEndTime());
+                GameType gameType = reservationDTO.getGameType();
 
+                BigDecimal finalPrice = priceCalculator(pricePerMinute, minutes, gameType );
 
+                reservation.setCourt(court);
+                reservation.setPrice(finalPrice);
+            }
 
-
-
-
-            // tady asi lepe přijímat Optional a rovnout se ptát zda je přítomen objkt
-
-            //  Získat Usera a namapovat jej
-
-            // Získat cenu za kurt a namapovat ji
-
-            // namapovat pomocí maperu zbytek entityt
-
-            // uložit do databáze
-
-            // namapovat na responseDTO a vratit
-
-            return null;
-
+            reservationDAO.save(reservation);
+            // persist sice nic nevrací ale mám už po metodě presist pridelene id a entita je v contextu takže s ní mohu dale pracovat
+            return reservationMapper.toReservationResponseDTO(reservation);
         }
-
-
-        // jinak vratit null
-
-
-        return;
+        return null;  // tady to musim vyřešit
     }
 
     // tady zvažit vyhození vyjímky a to samé u validačních metod
@@ -145,3 +140,4 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
 }
+

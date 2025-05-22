@@ -7,8 +7,6 @@ import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.management.Query;
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -27,6 +25,8 @@ public class UserDAOImp implements UserDAO {
         entityManager.persist(user);
     }
 
+
+    // Tady používám Optional protože mi metoda getSingleResult muže vyhodit vyjímku když nic nenajde
     @Override
     public Optional<User> findByPhone(String phone) {
 

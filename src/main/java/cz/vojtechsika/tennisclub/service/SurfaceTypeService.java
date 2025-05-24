@@ -9,7 +9,11 @@ public interface SurfaceTypeService {
 
     SurfaceTypeResponseDTO save(SurfaceTypeDTO surfaceTypeDTO);
 
-    SurfaceTypeResponseDTO getById(int id);
+    SurfaceTypeResponseDTO getById(Long id);
 
     List<SurfaceTypeResponseDTO> getAll();
+
+    SurfaceTypeResponseDTO update(SurfaceTypeDTO surfaceTypeDTO, Long id);
+
+    void delete(Long id);
 }

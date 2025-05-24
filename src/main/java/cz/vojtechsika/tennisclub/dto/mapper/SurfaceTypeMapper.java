@@ -17,7 +17,7 @@ public class SurfaceTypeMapper {
 
     }
 
-    public SurfaceTypeResponseDTO toDTO(SurfaceType surfaceType) {
+    public SurfaceTypeResponseDTO toResponseDTO(SurfaceType surfaceType) {
         SurfaceTypeResponseDTO surfaceTypeResponseDTO = new SurfaceTypeResponseDTO();
         surfaceTypeResponseDTO.setId(surfaceType.getId());
         surfaceTypeResponseDTO.setName(surfaceType.getName());

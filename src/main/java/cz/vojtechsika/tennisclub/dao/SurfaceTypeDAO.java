@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SurfaceTypeDAO {
 
-    void save(SurfaceType surfaceType);
+    SurfaceType save(SurfaceType surfaceType);
 
     SurfaceType findById(int id);
 

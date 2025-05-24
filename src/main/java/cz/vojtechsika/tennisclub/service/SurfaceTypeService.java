@@ -1,14 +1,15 @@
 package cz.vojtechsika.tennisclub.service;
 
-import cz.vojtechsika.tennisclub.entity.SurfaceType;
+import cz.vojtechsika.tennisclub.dto.SurfaceTypeDTO;
+import cz.vojtechsika.tennisclub.dto.SurfaceTypeResponseDTO;
 
 import java.util.List;
 
 public interface SurfaceTypeService {
 
-    void save(SurfaceType surfaceType);
+    SurfaceTypeResponseDTO save(SurfaceTypeDTO surfaceTypeDTO);
 
-    SurfaceType getById(int id);
+    SurfaceTypeResponseDTO getById(int id);
 
-    List<SurfaceType> getAll();
+    List<SurfaceTypeResponseDTO> getAll();
 }

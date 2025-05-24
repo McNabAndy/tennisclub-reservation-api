@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,10 +19,11 @@ public class SurfaceTypeDAOImpl implements SurfaceTypeDAO {
         entityManager = theEntityManager;
     }
 
-    @Override
-    public void save(SurfaceType surfaceType) {
-        entityManager.persist(surfaceType);
 
+    @Override
+    public SurfaceType save(SurfaceType surfaceType) {
+        entityManager.persist(surfaceType);
+        return surfaceType;  // presist sice nic nevrací ale už mi přidělí ID k entitě kterou uloží
     }
 
     @Override

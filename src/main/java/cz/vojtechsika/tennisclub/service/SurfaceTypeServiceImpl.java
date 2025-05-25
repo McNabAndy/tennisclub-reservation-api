@@ -2,7 +2,7 @@ package cz.vojtechsika.tennisclub.service;
 
 import cz.vojtechsika.tennisclub.dao.SurfaceTypeDAO;
 import cz.vojtechsika.tennisclub.dto.SurfaceTypeDTO;
-import cz.vojtechsika.tennisclub.dto.SurfaceTypeResponseDTO;
+import cz.vojtechsika.tennisclub.dto.response.SurfaceTypeResponseDTO;
 import cz.vojtechsika.tennisclub.dto.mapper.SurfaceTypeMapper;
 import cz.vojtechsika.tennisclub.entity.SurfaceType;
 import cz.vojtechsika.tennisclub.exception.SurfaceTypeNotFoundException;
@@ -31,7 +31,7 @@ public class SurfaceTypeServiceImpl implements SurfaceTypeService {
 
     @Transactional
     @Override
-    public SurfaceTypeResponseDTO save(SurfaceTypeDTO surfaceTypeDTO) {  // může toto vyhodit nějakou vyjímku ?
+    public SurfaceTypeResponseDTO saveSurfaceType(SurfaceTypeDTO surfaceTypeDTO) {  // může toto vyhodit nějakou vyjímku ?
         SurfaceType surfaceType = surfaceTypeMapper.toEntity(surfaceTypeDTO);
         SurfaceType saveSurfaceType = surfaceTypeDAO.save(surfaceType);
 
@@ -40,7 +40,7 @@ public class SurfaceTypeServiceImpl implements SurfaceTypeService {
 
     @Transactional
     @Override
-    public SurfaceTypeResponseDTO update(SurfaceTypeDTO surfaceTypeDTO, Long id) {
+    public SurfaceTypeResponseDTO updateSurfaceType(SurfaceTypeDTO surfaceTypeDTO, Long id) {
         Optional<SurfaceType> optionalSurfaceType = surfaceTypeDAO.findById(id);
         if (optionalSurfaceType.isEmpty()) {
             throw new SurfaceTypeNotFoundException("Update failed: Surface type with ID " + id + " does not exist");
@@ -54,8 +54,7 @@ public class SurfaceTypeServiceImpl implements SurfaceTypeService {
     }
 
     @Transactional
-    @Override
-    public void delete(Long id) {
+    public void deleteSurfaceType(Long id) {
         Optional <SurfaceType> optionalSurfaceType = surfaceTypeDAO.findById(id);
         if (optionalSurfaceType.isPresent()) {
             SurfaceType surfaceType = optionalSurfaceType.get();
@@ -68,7 +67,7 @@ public class SurfaceTypeServiceImpl implements SurfaceTypeService {
 
 
     @Override
-    public SurfaceTypeResponseDTO getById(Long id) {
+    public SurfaceTypeResponseDTO getSurfaceTypeById(Long id) {
         Optional<SurfaceType> optionalSurfaceType = surfaceTypeDAO.findById(id);
         if (optionalSurfaceType.isPresent()) {
             return surfaceTypeMapper.toResponseDTO(optionalSurfaceType.get());
@@ -78,7 +77,7 @@ public class SurfaceTypeServiceImpl implements SurfaceTypeService {
     }
 
     @Override
-    public List<SurfaceTypeResponseDTO> getAll() {
+    public List<SurfaceTypeResponseDTO> getAllSurfaceTypes() {
         List<SurfaceType> surfaceTypes = surfaceTypeDAO.findAll();
         if (surfaceTypes.isEmpty()){
             throw new SurfaceTypeNotFoundException("No Surface types found in the database");

@@ -1,7 +1,7 @@
 package cz.vojtechsika.tennisclub.dto.mapper;
 
 import cz.vojtechsika.tennisclub.dto.SurfaceTypeDTO;
-import cz.vojtechsika.tennisclub.dto.SurfaceTypeResponseDTO;
+import cz.vojtechsika.tennisclub.dto.response.SurfaceTypeResponseDTO;
 import cz.vojtechsika.tennisclub.entity.SurfaceType;
 import org.springframework.stereotype.Component;
 

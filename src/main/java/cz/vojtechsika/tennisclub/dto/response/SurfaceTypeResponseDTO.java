@@ -1,4 +1,4 @@
-package cz.vojtechsika.tennisclub.dto;
+package cz.vojtechsika.tennisclub.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

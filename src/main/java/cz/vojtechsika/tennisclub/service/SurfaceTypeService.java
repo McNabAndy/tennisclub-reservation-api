@@ -1,19 +1,19 @@
 package cz.vojtechsika.tennisclub.service;
 
 import cz.vojtechsika.tennisclub.dto.SurfaceTypeDTO;
-import cz.vojtechsika.tennisclub.dto.SurfaceTypeResponseDTO;
+import cz.vojtechsika.tennisclub.dto.response.SurfaceTypeResponseDTO;
 
 import java.util.List;
 
 public interface SurfaceTypeService {
 
-    SurfaceTypeResponseDTO save(SurfaceTypeDTO surfaceTypeDTO);
+    SurfaceTypeResponseDTO saveSurfaceType(SurfaceTypeDTO surfaceTypeDTO);
 
-    SurfaceTypeResponseDTO getById(Long id);
+    SurfaceTypeResponseDTO getSurfaceTypeById(Long id);
 
-    List<SurfaceTypeResponseDTO> getAll();
+    List<SurfaceTypeResponseDTO> getAllSurfaceTypes();
 
-    SurfaceTypeResponseDTO update(SurfaceTypeDTO surfaceTypeDTO, Long id);
+    SurfaceTypeResponseDTO updateSurfaceType(SurfaceTypeDTO surfaceTypeDTO, Long id);
 
-    void delete(Long id);
+    void deleteSurfaceType(Long id);
 }

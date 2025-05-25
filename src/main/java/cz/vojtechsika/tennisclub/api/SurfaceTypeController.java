@@ -5,9 +5,11 @@ import cz.vojtechsika.tennisclub.dto.response.SurfaceTypeResponseDTO;
 import cz.vojtechsika.tennisclub.service.SurfaceTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/surfaces")
@@ -15,7 +17,6 @@ public class SurfaceTypeController {
 
     private final SurfaceTypeService surfaceTypeService;
 
-    // Možná to tu všechno převest na ResponseEntity<> a sjednotit pojmenování metod napříč aplikací....
 
     @Autowired
     public SurfaceTypeController(SurfaceTypeService theSurfaceTpeService) {
@@ -23,29 +24,31 @@ public class SurfaceTypeController {
     }
 
     @PostMapping("/create")
-    public SurfaceTypeResponseDTO createSurfaceType(@RequestBody SurfaceTypeDTO surfaceTypeDTO) {
-        return surfaceTypeService.saveSurfaceType(surfaceTypeDTO);
+    public ResponseEntity<SurfaceTypeResponseDTO> createSurfaceType(@RequestBody SurfaceTypeDTO surfaceTypeDTO) {
+        return new ResponseEntity<>(surfaceTypeService.saveSurfaceType(surfaceTypeDTO), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public SurfaceTypeResponseDTO getSurfaceType(@PathVariable Long id) {
-        return surfaceTypeService.getSurfaceTypeById(id);
+    public ResponseEntity<SurfaceTypeResponseDTO> getSurfaceType(@PathVariable Long id) {
+        return new ResponseEntity<>(surfaceTypeService.getSurfaceTypeById(id),HttpStatus.OK);
     }
 
     @GetMapping
-    public List<SurfaceTypeResponseDTO> getAllSurfaceTypes() {
-        return surfaceTypeService.getAllSurfaceTypes();
+    public ResponseEntity<List<SurfaceTypeResponseDTO>> getAllSurfaceTypes() {
+        return new ResponseEntity<>(surfaceTypeService.getAllSurfaceTypes(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public SurfaceTypeResponseDTO updateSurfaceType(@PathVariable Long id, @RequestBody SurfaceTypeDTO surfaceTypeDTO) {
-        return surfaceTypeService.updateSurfaceType(surfaceTypeDTO, id);
+    public ResponseEntity<SurfaceTypeResponseDTO> updateSurfaceType(@PathVariable Long id,
+                                                                    @RequestBody SurfaceTypeDTO surfaceTypeDTO) {
+        return new ResponseEntity<>(surfaceTypeService.updateSurfaceType(surfaceTypeDTO, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteSurfaceType(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteSurfaceType(@PathVariable Long id) {
         surfaceTypeService.deleteSurfaceType(id);
+        Map<String, String> response = Map.of("message", "Surface Type with ID " + id + " was deleted.");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

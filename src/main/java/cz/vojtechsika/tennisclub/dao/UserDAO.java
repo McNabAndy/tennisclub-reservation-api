@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface UserDAO {
 
-    void save(User user);
+    User save(User user);
 
     Optional<User> findByPhone(String phone);
 }

@@ -12,8 +12,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class SurfaceTypeDTO {
 
+    private Long id;
+
     private String name;
 
     private BigDecimal minutePrice;
+
+
 
 }

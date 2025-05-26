@@ -2,6 +2,7 @@ package cz.vojtechsika.tennisclub.dao;
 
 import cz.vojtechsika.tennisclub.dto.response.CourtResponseDTO;
 import cz.vojtechsika.tennisclub.entity.Court;
+import cz.vojtechsika.tennisclub.entity.SurfaceType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class CourtDAOImpl implements CourtDAO {
     @Override
     public Optional<Court> findById(Long id) {
         TypedQuery<Court> query = entityManager.createQuery("SELECT c FROM Court c WHERE " +
-                        "c.id = :id AND c.deleted = :isFalse AND c.surfaceType.deleted =:isFalse", Court.class).
+                        "c.id = :id AND c.deleted = :isFalse", Court.class).
                 setParameter("id", id).
                 setParameter("isFalse", false);
 
@@ -46,8 +47,7 @@ public class CourtDAOImpl implements CourtDAO {
     @Override
     public Optional<Court> findByCourtNumber(int courtNumber) {
         TypedQuery<Court> query = entityManager.createQuery("SELECT c FROM Court c WHERE " +
-                        "c.courtNumber = :courtNumber AND c.deleted = :isFalse AND " +
-                        "c.surfaceType.deleted =:isFalse", Court.class).
+                        "c.courtNumber = :courtNumber AND c.deleted = :isFalse", Court.class).
                 setParameter("courtNumber", courtNumber).
                 setParameter("isFalse", false);
 
@@ -63,15 +63,27 @@ public class CourtDAOImpl implements CourtDAO {
     @Override
     public List<Court> findAll() {
         TypedQuery<Court> query = entityManager.createQuery("SELECT c FROM Court c WHERE " +
-                        "c.deleted = :isFalse AND c.surfaceType.deleted =:isFalse", Court.class).
+                        "c.deleted = :isFalse", Court.class).
                 setParameter("isFalse", false);
 
         return query.getResultList();
     }
 
     @Override
+    public List<Court> findAllBySurfaceTypeId(Long id) {
+        TypedQuery<Court> query = entityManager.createQuery("SELECT c FROM Court c WHERE " +
+                        "c.deleted = :isFalse AND c.surfaceType.id = :id", Court.class).
+                setParameter("id", id).
+                setParameter("isFalse", false);
+
+        return query.getResultList();
+    }
+
+
+    @Override
     public Court update(Court court) {
         return entityManager.merge(court);
     }
+
 
 }

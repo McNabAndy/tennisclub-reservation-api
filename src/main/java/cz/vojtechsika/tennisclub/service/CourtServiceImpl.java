@@ -1,6 +1,7 @@
 package cz.vojtechsika.tennisclub.service;
 
 import cz.vojtechsika.tennisclub.dao.CourtDAO;
+import cz.vojtechsika.tennisclub.dao.ReservationDAO;
 import cz.vojtechsika.tennisclub.dao.SurfaceTypeDAO;
 import cz.vojtechsika.tennisclub.dto.CourtDTO;
 import cz.vojtechsika.tennisclub.dto.response.SurfaceTypeResponseDTO;
@@ -8,6 +9,7 @@ import cz.vojtechsika.tennisclub.dto.mapper.CourtMapper;
 import cz.vojtechsika.tennisclub.dto.mapper.SurfaceTypeMapper;
 import cz.vojtechsika.tennisclub.dto.response.CourtResponseDTO;
 import cz.vojtechsika.tennisclub.entity.Court;
+import cz.vojtechsika.tennisclub.entity.Reservation;
 import cz.vojtechsika.tennisclub.entity.SurfaceType;
 import cz.vojtechsika.tennisclub.exception.CourtNotFoundException;
 import cz.vojtechsika.tennisclub.exception.CourtNumberAlreadyExistsException;
@@ -31,16 +33,21 @@ public class CourtServiceImpl implements CourtService {
 
     private final SurfaceTypeMapper surfaceTypeMapper;
 
+    private final ReservationDAO reservationDAO;
+
     @Autowired
     public CourtServiceImpl(CourtDAO thecourtDAO,
                             SurfaceTypeDAO theSurfaceTypeDAO,
                             CourtMapper thecourtMapper,
-                            SurfaceTypeMapper theSurfaceTypeMapper
+                            SurfaceTypeMapper theSurfaceTypeMapper,
+                            ReservationDAO thereservationDAO
                             ) {
         courtDAO = thecourtDAO;
         courtMapper = thecourtMapper;
         surfaceTypeDAO = theSurfaceTypeDAO;
         surfaceTypeMapper = theSurfaceTypeMapper;
+        reservationDAO = thereservationDAO;
+
     }
 
     @Transactional
@@ -83,7 +90,6 @@ public class CourtServiceImpl implements CourtService {
             return courtMapper.toResponseDTO(court,surfaceTypeResponseDTO);
         } else {
             throw new CourtNotFoundException("Court with id " + id + " not found");
-
         }
     }
 
@@ -97,7 +103,7 @@ public class CourtServiceImpl implements CourtService {
                     SurfaceTypeResponseDTO surfaceTypeResponseDTO = surfaceTypeMapper.toResponseDTO(court.getSurfaceType());
                     return courtMapper.toResponseDTO(court,surfaceTypeResponseDTO);
                 }).
-                collect(Collectors.toList());
+                toList();
     }
 
     @Transactional
@@ -136,10 +142,31 @@ public class CourtServiceImpl implements CourtService {
             Court court = optionalCourt.get();
             court.setDeleted(true);
             courtDAO.update(court);
+
+            List<Reservation> reservations = reservationDAO.findAllByCourtNumber(court.getCourtNumber());
+
+            if (!reservations.isEmpty()) {
+                reservations.stream().
+                        forEach(reservation -> {
+                            reservation.setDeleted(true);
+                            reservationDAO.update(reservation);
+                        });
+            }
         } else {
-            throw new CourtNotFoundException("Delete failed: Court with ID " + id + " was not found.");
+            throw new CourtNotFoundException("Delete failed: Court with ID " + id + " not found.");
         }
 
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+

@@ -7,6 +7,7 @@ import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,26 +22,29 @@ public class UserDAOImp implements UserDAO {
 
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         entityManager.persist(user);
+        return user;
     }
 
 
     // Tady používám Optional protože mi metoda getSingleResult muže vyhodit vyjímku když nic nenajde
     @Override
     public Optional<User> findByPhone(String phone) {
+        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE" +
+                    " u.phoneNumber = :phone AND u.deleted = :isFalse", User.class).
+                setParameter("phone", phone).
+                setParameter("isFalse", false);
 
-        try{
-            TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE" +
-                    " u.phoneNumber = :phone", User.class);
-
-            query.setParameter("phone", phone);
-
-            return Optional.of(query.getSingleResult());
-        }
-        catch(NoResultException e){
+        List<User> result = query.getResultList();
+        if (result.isEmpty()) {
             return Optional.empty();
+        } else {
+            return Optional.of(result.get(0));
         }
-
     }
+
+
+
+
 }

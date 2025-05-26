@@ -1,9 +1,11 @@
 package cz.vojtechsika.tennisclub.service;
 
+import cz.vojtechsika.tennisclub.dao.CourtDAO;
 import cz.vojtechsika.tennisclub.dao.SurfaceTypeDAO;
 import cz.vojtechsika.tennisclub.dto.SurfaceTypeDTO;
 import cz.vojtechsika.tennisclub.dto.response.SurfaceTypeResponseDTO;
 import cz.vojtechsika.tennisclub.dto.mapper.SurfaceTypeMapper;
+import cz.vojtechsika.tennisclub.entity.Court;
 import cz.vojtechsika.tennisclub.entity.SurfaceType;
 import cz.vojtechsika.tennisclub.exception.SurfaceTypeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class SurfaceTypeServiceImpl implements SurfaceTypeService {
@@ -21,11 +22,21 @@ public class SurfaceTypeServiceImpl implements SurfaceTypeService {
 
     private final SurfaceTypeMapper surfaceTypeMapper;
 
+    private final CourtDAO courtDAO;
+
+    private final CourtService courtService;
+
     @Autowired
     public SurfaceTypeServiceImpl(SurfaceTypeDAO theSurfaceTypeDAO,
-                                  SurfaceTypeMapper theSurfaceTypeMapper) {
+                                  SurfaceTypeMapper theSurfaceTypeMapper,
+                                  CourtDAO theCourtDAO,
+                                  CourtService theCourtService) {
         surfaceTypeDAO = theSurfaceTypeDAO;
         surfaceTypeMapper = theSurfaceTypeMapper;
+        courtDAO = theCourtDAO;
+        courtService = theCourtService;
+
+
     }
 
 
@@ -42,6 +53,7 @@ public class SurfaceTypeServiceImpl implements SurfaceTypeService {
     @Override
     public SurfaceTypeResponseDTO updateSurfaceType(SurfaceTypeDTO surfaceTypeDTO, Long id) {
         Optional<SurfaceType> optionalSurfaceType = surfaceTypeDAO.findById(id);
+
         if (optionalSurfaceType.isEmpty()) {
             throw new SurfaceTypeNotFoundException("Update failed: Surface type with ID " + id + " does not exist");
         }
@@ -54,12 +66,24 @@ public class SurfaceTypeServiceImpl implements SurfaceTypeService {
     }
 
     @Transactional
+    @Override
     public void deleteSurfaceType(Long id) {
+
         Optional <SurfaceType> optionalSurfaceType = surfaceTypeDAO.findById(id);
         if (optionalSurfaceType.isPresent()) {
             SurfaceType surfaceType = optionalSurfaceType.get();
             surfaceType.setDeleted(true);
             surfaceTypeDAO.update(surfaceType);
+
+            List<Court> courts = courtDAO.findAllBySurfaceTypeId(id);
+
+            if (!courts.isEmpty()) {
+                courts.stream().
+                        forEach(court -> {
+                            courtService.deleteCourt(court.getId());
+                        });
+            }
+
         } else {
             throw new SurfaceTypeNotFoundException("Delete failed: Surface type with ID " + id + " was not found.");
         }
@@ -84,7 +108,7 @@ public class SurfaceTypeServiceImpl implements SurfaceTypeService {
         }
         return surfaceTypes.stream().
                 map(surfaceType -> surfaceTypeMapper.toResponseDTO(surfaceType)).
-                collect(Collectors.toList());
+                toList();
     }
 
 

@@ -193,7 +193,7 @@ public class ReservationServiceImpl implements ReservationService {
         return isInFuture && isTwoHoursLimit && isValidReservationInterval && !hasOverlappingReservation;
     }
 
-    private boolean isInFuture(LocalDateTime startTime) {
+    public boolean isInFuture(LocalDateTime startTime) {
         return startTime.isAfter(LocalDateTime.now());
     }
 

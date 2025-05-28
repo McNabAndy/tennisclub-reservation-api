@@ -42,7 +42,7 @@ public class SurfaceTypeServiceImpl implements SurfaceTypeService {
 
     @Transactional
     @Override
-    public SurfaceTypeResponseDTO saveSurfaceType(SurfaceTypeDTO surfaceTypeDTO) {  // může toto vyhodit nějakou vyjímku ?
+    public SurfaceTypeResponseDTO saveSurfaceType(SurfaceTypeDTO surfaceTypeDTO) {
         SurfaceType surfaceType = surfaceTypeMapper.toEntity(surfaceTypeDTO);
         SurfaceType saveSurfaceType = surfaceTypeDAO.save(surfaceType);
 

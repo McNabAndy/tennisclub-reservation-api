@@ -54,7 +54,7 @@ public class CourtServiceImpl implements CourtService {
     @Override
     public CourtResponseDTO save(CourtDTO courtDTO) {  // metoda save je blba možna to přepsat na createCourt
 
-        // Kontrola že kurt existuje
+
         Optional<SurfaceType> optionalSurfaceType = surfaceTypeDAO.findById(courtDTO.getSurfaceTypeId());
         Optional<Court> optionalCourt = courtDAO.findByCourtNumber(courtDTO.getCourtNumber());
 
@@ -64,7 +64,7 @@ public class CourtServiceImpl implements CourtService {
         }
 
         if (optionalSurfaceType.isPresent()) {
-            // namapování povrchu do odpovedi kterou pak chci uazat na vystupu při vytvoření kurtu
+
             SurfaceType surfaceType = optionalSurfaceType.get();
             SurfaceTypeResponseDTO surfaceTypeResponseDTO = surfaceTypeMapper.toResponseDTO(surfaceType);
 

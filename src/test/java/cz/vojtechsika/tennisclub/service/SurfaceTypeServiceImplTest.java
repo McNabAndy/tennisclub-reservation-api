@@ -8,10 +8,7 @@ import cz.vojtechsika.tennisclub.dto.response.SurfaceTypeResponseDTO;
 import cz.vojtechsika.tennisclub.entity.Court;
 import cz.vojtechsika.tennisclub.entity.SurfaceType;
 import cz.vojtechsika.tennisclub.exception.SurfaceTypeNotFoundException;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SurfaceTypeServiceImplTest {
 
     @Mock
@@ -96,6 +94,7 @@ class SurfaceTypeServiceImplTest {
     // neměl bych tady otestovat i jiné scénáře ??
     @Test
     @DisplayName("Create new SurfaceType with valid DTO")
+    @Order(1)
     void saveSurfaceType_withValidSurfaceTypeDTO_shouldReturnSurfaceTypeResponseDTO() {
 
         //Arrange
@@ -114,6 +113,7 @@ class SurfaceTypeServiceImplTest {
 
     @Test
     @DisplayName("Update SurfaceType with valid DTO and ID")
+    @Order(6)
     void updateSurfaceType_withValidSurfaceTypeDTOAndId_shouldReturnSurfaceTypeResponseDTO() {
 
         // Arrange
@@ -136,6 +136,7 @@ class SurfaceTypeServiceImplTest {
 
     @Test
     @DisplayName("Update SurfaceType with invalid ID")
+    @Order(7)
     void updateSurfaceType_withInvalidId_shouldReturnSurfaceTypeNotFoundException() {
 
         // Arrange
@@ -154,6 +155,7 @@ class SurfaceTypeServiceImplTest {
 
     @Test
     @DisplayName("Delete SurfaceType by ID and no exited connected courts")
+    @Order(8)
     void deleteSurfaceType_validSurfaceTypeIdAndNoExistedCourts_shouldReturnTrue() {
 
         // Arrange
@@ -177,6 +179,7 @@ class SurfaceTypeServiceImplTest {
 
     @Test
     @DisplayName("Delete SurfaceType by ID with existing courts")
+    @Order(9)
     void deleteSurfaceType_validSurfaceTypeIdWithCourts_shouldReturnTrue() {
 
         // Arrange
@@ -218,6 +221,7 @@ class SurfaceTypeServiceImplTest {
 
     @Test
     @DisplayName("Delete SurfaceType with invalid ID")
+    @Order(10)
     void deleteSurfaceType_invalidSurfaceTypeId_shouldReturnSurfaceTypeNotFoundException() {
 
         // Arrange
@@ -236,6 +240,7 @@ class SurfaceTypeServiceImplTest {
 
     @Test
     @DisplayName("Get SurfaceType by valid ID")
+    @Order(2)
     void getSurfaceTypeById_validId_shouldReturnSurfaceTypeResponseDTO() {
 
         // Arrange
@@ -256,6 +261,7 @@ class SurfaceTypeServiceImplTest {
 
     @Test
     @DisplayName("Get SurfaceType by inValid ID")
+    @Order(3)
     void getSurfaceTypeById_onValidId_shouldReturnSurfaceTypeNotFoundException() {
 
         // Arrange
@@ -274,6 +280,7 @@ class SurfaceTypeServiceImplTest {
 
     @Test
     @DisplayName("Get All SurfaceTypes")
+    @Order(4)
     void getAllSurfaceTypes_shouldReturnAllSurfaceTypesResponseDTO() {
 
         // Arrange
@@ -320,7 +327,8 @@ class SurfaceTypeServiceImplTest {
 
 
     @Test
-    @DisplayName("Should throw SurfaceTypeNotFoundException")
+    @DisplayName("Get all non existing surface types should throw SurfaceTypeNotFoundException")
+    @Order(5)
     void getAllSurfaceTypes_shouldReturnSurfaceTypeNotFoundException() {
 
         // Arrange

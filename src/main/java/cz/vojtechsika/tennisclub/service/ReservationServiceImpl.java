@@ -78,6 +78,8 @@ public class ReservationServiceImpl implements ReservationService {
         }
     }
 
+
+    // MUsím zde fakt upozornit na to null, když je přítomno používá to metoda pro create když ne používa ho update
     @Transactional
     @Override
     public ReservationResponseDTO updateReservation(ReservationDTO reservationDTO, Long id) {
@@ -193,7 +195,7 @@ public class ReservationServiceImpl implements ReservationService {
         return isInFuture && isTwoHoursLimit && isValidReservationInterval && !hasOverlappingReservation;
     }
 
-    public boolean isInFuture(LocalDateTime startTime) {
+    private boolean isInFuture(LocalDateTime startTime) {
         return startTime.isAfter(LocalDateTime.now());
     }
 

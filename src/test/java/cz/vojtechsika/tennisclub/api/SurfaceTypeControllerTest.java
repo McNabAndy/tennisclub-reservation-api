@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.vojtechsika.tennisclub.dto.SurfaceTypeDTO;
 import cz.vojtechsika.tennisclub.dto.response.SurfaceTypeResponseDTO;
 import cz.vojtechsika.tennisclub.exception.SurfaceTypeNotFoundException;
+import cz.vojtechsika.tennisclub.service.SurfaceTypeService;
 import cz.vojtechsika.tennisclub.service.SurfaceTypeServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -33,7 +34,7 @@ class SurfaceTypeControllerWebLayerTest {
     MockMvc mockMvc;
 
     @MockitoBean
-    SurfaceTypeServiceImpl surfaceTypeService;
+    SurfaceTypeService surfaceTypeService;
 
 
     @Autowired
@@ -103,7 +104,7 @@ class SurfaceTypeControllerWebLayerTest {
         surfaceTypeResponseDTO.setMinutePrice(BigDecimal.valueOf(10));
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/surfaces/{id}", 1)
+                .get("/api/surfaces/{id}", surfaceTypeId)
                 .accept(MediaType.APPLICATION_JSON);
 
         when(surfaceTypeService.getSurfaceTypeById(surfaceTypeId)).thenReturn(surfaceTypeResponseDTO);

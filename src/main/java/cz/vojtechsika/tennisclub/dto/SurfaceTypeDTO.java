@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class SurfaceTypeDTO {
 
+
+    // tady pracuju s ideckem který nepotřebuju zapomenl sem tento atribut adstranut => mam pak chybu dal v aplikaci, musím proveřit všude kde pracuju s ID surface type
     private Long id;
 
     private String name;

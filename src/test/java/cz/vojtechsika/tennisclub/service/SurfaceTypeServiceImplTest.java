@@ -90,8 +90,6 @@ class SurfaceTypeServiceImplTest {
 
     }
 
-
-    // neměl bych tady otestovat i jiné scénáře ??
     @Test
     @DisplayName("Create new SurfaceType with valid DTO")
     @Order(1)
@@ -234,10 +232,6 @@ class SurfaceTypeServiceImplTest {
                 "Should throw SurfaceTypeNotFoundException");
     }
 
-
-
-
-
     @Test
     @DisplayName("Get SurfaceType by valid ID")
     @Order(2)
@@ -324,7 +318,6 @@ class SurfaceTypeServiceImplTest {
                 "The returned list should match the expected list of SurfaceTypeResponseDTOs.");
 
     }
-
 
     @Test
     @DisplayName("Get all non existing surface types should throw SurfaceTypeNotFoundException")

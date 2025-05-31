@@ -89,7 +89,6 @@ public class SurfaceTypeServiceImpl implements SurfaceTypeService {
         }
     }
 
-
     @Override
     public SurfaceTypeResponseDTO getSurfaceTypeById(Long id) {
         Optional<SurfaceType> optionalSurfaceType = surfaceTypeDAO.findById(id);

@@ -5,6 +5,7 @@ import cz.vojtechsika.tennisclub.dto.response.SurfaceTypeResponseDTO;
 import cz.vojtechsika.tennisclub.service.SurfaceTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class SurfaceTypeController {
         surfaceTypeService = theSurfaceTpeService;
     }
 
-    @PostMapping("/create")
+    @PostMapping(value= "/create",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SurfaceTypeResponseDTO> createSurfaceType(@RequestBody SurfaceTypeDTO surfaceTypeDTO) {
         return new ResponseEntity<>(surfaceTypeService.saveSurfaceType(surfaceTypeDTO), HttpStatus.CREATED);
     }

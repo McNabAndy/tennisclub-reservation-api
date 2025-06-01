@@ -20,9 +20,9 @@ public class ReservationMapper {
         reservation.setEndTime(reservationDTO.getEndTime());
         reservation.setCreatedAt(LocalDateTime.now());
         reservation.setGameType(reservationDTO.getGameType());
-        reservation.setDeleted(false);  // default value
+        reservation.setDeleted(false);
 
-        return reservation; // price, User, Court must be set in Service layer
+        return reservation; // price, user, court must be set in service layer
     }
 
     public ReservationResponseDTO toReservationResponseDTO(Reservation reservation) {

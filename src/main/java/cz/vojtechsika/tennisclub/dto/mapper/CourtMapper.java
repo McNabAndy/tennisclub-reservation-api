@@ -13,7 +13,7 @@ public class CourtMapper {
         Court court = new Court();
         court.setCourtNumber(courtDTO.getCourtNumber());
         court.setDeleted(false);
-        return court; // SurfaceType musím namapovat až na základě vyhledání v service a reservvation je druha strana vazby
+        return court;
     }
 
     public CourtResponseDTO toResponseDTO(Court court, SurfaceTypeResponseDTO surfaceTypeResponseDTO) {

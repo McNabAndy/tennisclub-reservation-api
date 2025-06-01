@@ -13,7 +13,7 @@ public class SurfaceTypeMapper {
         surfaceType.setName(surfaceTypeDTO.getName());
         surfaceType.setDeleted(false);
         surfaceType.setMinutePrice(surfaceTypeDTO.getMinutePrice());
-        return surfaceType; // Curts ne nastaví až na základě vazny, id  nastavuje databaze sama
+        return surfaceType;
 
     }
 

@@ -26,7 +26,7 @@ public class ReservationDTO {
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime endTime;
 
-    private int courtNumber;  // možna sem dát spíš id
+    private int courtNumber;
 
     private GameType gameType;
 

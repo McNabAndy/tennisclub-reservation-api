@@ -12,7 +12,7 @@ public class UserMapper {
         user.setPhoneNumber(reservationDTO.getPhoneNumber());
         user.setUserName(reservationDTO.getUserName());
         user.setDeleted(false);
-        return user;  // List<Reservation> se naplni po ulození rezervace sám díky vazbě.
+        return user;
     }
 
 

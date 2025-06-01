@@ -51,7 +51,6 @@ class SurfaceTypeServiceImplTest {
 
 
 
-
     @BeforeEach
     public void setUp() {
         Long surfaceTypeId = 1L;

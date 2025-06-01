@@ -1,7 +1,6 @@
 package cz.vojtechsika.tennisclub.dao;
 
 
-import cz.vojtechsika.tennisclub.entity.Court;
 import cz.vojtechsika.tennisclub.entity.Reservation;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;

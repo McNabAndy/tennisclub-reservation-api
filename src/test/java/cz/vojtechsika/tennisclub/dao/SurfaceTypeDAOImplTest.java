@@ -42,7 +42,7 @@ class SurfaceTypeDAOImplTest {
         // Assert
         assertEquals(surfaceType, actual,"Objets should be same");
 
-        //
+        // Verify
         verify(entityManager, times(1)).persist(surfaceType);
 
     }

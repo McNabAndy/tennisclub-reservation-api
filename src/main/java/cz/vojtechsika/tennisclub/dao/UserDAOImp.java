@@ -28,7 +28,6 @@ public class UserDAOImp implements UserDAO {
     }
 
 
-    // Tady používám Optional protože mi metoda getSingleResult muže vyhodit vyjímku když nic nenajde
     @Override
     public Optional<User> findByPhone(String phone) {
         TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE" +

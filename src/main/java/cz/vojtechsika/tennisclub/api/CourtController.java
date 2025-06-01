@@ -48,7 +48,7 @@ public class CourtController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteCourt(@PathVariable Long id) {
         courtService.deleteCourt(id);
-        Map<String, String> response = Map.of("message", "Court with ID " + id + " was deleted.");
+        Map<String, String> response = Map.of("message", "Court with id " + id + " was deleted");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

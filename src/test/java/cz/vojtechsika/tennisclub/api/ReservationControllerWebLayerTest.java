@@ -34,13 +34,16 @@ import static org.mockito.Mockito.*;
 class ReservationControllerWebLayerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @MockitoBean
-    ReservationService reservationService;
+    private ReservationService reservationService;
 
     @Autowired
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+
+    // nemeli by ty metody mít modifikátor přístupu ?
 
     @Test
     @DisplayName("Fetch reservation by valid id")
@@ -552,7 +555,7 @@ class ReservationControllerWebLayerTest {
     }
 
     @Test
-    @DisplayName("Delete Reservation")
+    @DisplayName("Delete Reservation invalid Id")
     void deleteReservation_inValidId_return404() throws Exception {
 
         // Arrange

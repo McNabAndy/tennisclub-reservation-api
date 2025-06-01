@@ -6,7 +6,6 @@ import cz.vojtechsika.tennisclub.dto.SurfaceTypeDTO;
 import cz.vojtechsika.tennisclub.dto.response.SurfaceTypeResponseDTO;
 import cz.vojtechsika.tennisclub.exception.SurfaceTypeNotFoundException;
 import cz.vojtechsika.tennisclub.service.SurfaceTypeService;
-import cz.vojtechsika.tennisclub.service.SurfaceTypeServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

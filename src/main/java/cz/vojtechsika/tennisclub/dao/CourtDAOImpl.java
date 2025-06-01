@@ -22,7 +22,7 @@ public class CourtDAOImpl implements CourtDAO {
     }
 
     @Override
-    public Court save(Court court) {
+    public Court save(Court court)  {
         entityManager.persist(court);
         return court;
     }

@@ -54,14 +54,8 @@ class ReservationServiceImplTest {
 
 
 
-    @BeforeEach
-    void setUp() {
-
-    }
-
     @Test
     @DisplayName("Create new Reservation and User in valid date for (SINGLES)")
-    @Order(1)
     void createReservation_newReservationForNewUserWithValidDateAndTime_ShouldReturnNewReservationResponseDTO() {
 
         // Arrange
@@ -133,7 +127,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Throw exception if reservation duration is longer than 2 hours (SINGLES)")
-    @Order(2)
     void createReservation_newReservationForNewUserWithInvalidDateAndTime_ShouldReturnReservationValidationException() {
 
         // Arrange
@@ -178,7 +171,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Throw exception if reservation date and time is in past (SINGLES)")
-    @Order(3)
     void createReservation_newReservationForNewUserWithPastDateAndTime_ShouldReturnReservationValidationException() {
 
         int courtNumber = 101;
@@ -222,7 +214,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Throw exception if reservation has overlapping Reservations (SINGLES)")
-    @Order(4)
     void createReservation_newReservationForNewUserWithOverLappingReservations_ShouldReturnReservationValidationException() {
 
         int courtNumber = 101;
@@ -267,7 +258,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Create new Reservation for existing User with valid date for (SINGLES)")
-    @Order(5)
     void createReservation_newReservationForExistingUserWithValidDateAndTime_ShouldReturnNewReservationResponseDTO() {
 
         // Arrange
@@ -341,10 +331,8 @@ class ReservationServiceImplTest {
         verify(userDAO, never()).save(user);
     }
 
-
     @Test
     @DisplayName("Create new Reservation for existing User with different and with valid date for (SINGLES)")
-    @Order(6)
     void createReservation_newReservationForExistingUserWithDifferentNameWithValidDateAndTime_ShouldReturnNewReservationResponseDTO() {
 
         // Arrange
@@ -418,7 +406,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Get Reservation by Id")
-    @Order(7)
     void getReservationById_validId_ShouldReturnReservationResponseDTO() {
 
         // Arrange
@@ -445,7 +432,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Get Reservation by non exist Id")
-    @Order(8)
     void getReservationById_inValidId_ShouldReturnReservationNotFoundException() {
 
         // Arrange
@@ -468,18 +454,14 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Get all Reservations by valid court number")
-    @Order(9)
     void getReservationByCourtNumber_validCourtNumber_ShouldReturnReservationResponseDTOList() {
 
         // Arrange
-        Long reservationId = 1L;
         int courtNumber = 101;
 
         LocalDateTime startTime = LocalDateTime.of(LocalDate.now().
                 plusDays(1), LocalTime.of(10, 0));
         LocalDateTime endTime = startTime.plusHours(2);
-
-        Reservation reservation = new Reservation();
 
         Reservation reservation2 = new Reservation();
         reservation2.setStartTime(startTime.plusHours(2));
@@ -516,11 +498,9 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Get all Reservations by invalid court number")
-    @Order(10)
     void getReservationByCourtNumber_inValidCourtNumber_ShouldReturnReservationNotFoundException() {
 
         // Arrange
-        Long reservationId = 1L;
         int courtNumber = 101;
 
         List<Reservation> reservations = List.of();
@@ -536,7 +516,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Get all Reservations by phone number")
-    @Order(11)
     void getReservationByPhoneNumber_validPhoneNumber_ShouldReturnReservationNotFoundException() {
 
         // Arrange
@@ -582,7 +561,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Get all Reservations by invalid phone number")
-    @Order(12)
     void getReservationByPhoneNumber_inValidPhoneNumber_ShouldReturnReservationNotFoundException() {
 
         // Arrange
@@ -603,12 +581,8 @@ class ReservationServiceImplTest {
                 "Message should match" );
     }
 
-
-
-
     @Test
     @DisplayName("Get List of existing reservation")
-    @Order(13)
     void getAllReservations_shouldReturnAllReservationsResponseDTO() {
 
         // Arrange
@@ -652,7 +626,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Get all Reservations should return ReservationNotFoundException ")
-    @Order(14)
     void getAllReservations_shouldReturnReservationNotFoundException() {
 
         // Arrange
@@ -668,7 +641,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Update existing Reservation wit valid ReservationDTO")
-    @Order(15)
     void updateReservation_withValidDTO_ShouldReturnUpdatedReservationResponseDTO() {
 
         // Arrange
@@ -684,8 +656,6 @@ class ReservationServiceImplTest {
         reservationDTO.setEndTime(endTime);
         reservationDTO.setCourtNumber(courtNumber);
         reservationDTO.setGameType(GameType.SINGLES);
-
-        Reservation reservation1 = new Reservation();
 
         Reservation reservation2 = new Reservation();
         reservation2.setStartTime(startTime.plusHours(2));
@@ -753,10 +723,8 @@ class ReservationServiceImplTest {
 
     }
 
-
     @Test
     @DisplayName("Update non exist Reservation")
-    @Order(16)
     void updateReservation_withValidDateAndTimeAndNonExistReservationById_ShouldReturnReservationNotFoundException() {
 
         // Arrange
@@ -814,7 +782,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Update Reservation with non valid time range")
-    @Order(17)
     void updateReservation_withInValidDateAndTime_ShouldReturnReservationValidationException() {
 
         // Arrange
@@ -866,7 +833,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Update Reservation with Date in past")
-    @Order(18)
     void updateReservation_withDateInPast_ShouldReturnReservationValidationException() {
 
         // Arrange
@@ -918,7 +884,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Update Reservation with overLapping Reservation")
-    @Order(19)
     void updateReservation_withOverLappingReservation_ShouldReturnReservationValidationException() {
 
         // Arrange
@@ -968,10 +933,8 @@ class ReservationServiceImplTest {
         verify(reservationDAO, never()).update(reservation);
     }
 
-
     @Test
     @DisplayName("Deleted Reservation by valid Id")
-    @Order(20)
     void deleteReservation_validReservationId_shouldSetDeletedToTrue() {
         // Arrange
         Long reservationId = 1L;
@@ -998,7 +961,6 @@ class ReservationServiceImplTest {
 
     @Test
     @DisplayName("Deleted Reservation by invalid Id")
-    @Order(21)
     void deleteReservation_inValidReservationId_shouldThrowReservationNotFoundException() {
         // Arrange
         Long reservationId = 1L;

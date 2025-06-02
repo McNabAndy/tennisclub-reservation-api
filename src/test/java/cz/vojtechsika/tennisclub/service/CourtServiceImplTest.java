@@ -27,9 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CourtServiceImplTest {
-
 
 
     @Mock
@@ -52,17 +50,8 @@ class CourtServiceImplTest {
 
 
 
-
-    @BeforeEach
-    void setUp() {
-
-    }
-
-
-    // k tomuhle testu pokud bude čas se vrátit a optimalizovat ho hlavně arrange část
     @Test
     @DisplayName("Create new Court with valid DTO ")
-    @Order(1)
     void save_validCourtDTO_shouldCreateNewCourt() {
 
         // Arrange
@@ -110,7 +99,6 @@ class CourtServiceImplTest {
 
     @Test
     @DisplayName("Create new Court with existing court id")
-    @Order(2)
     void save_inValidDTOWithExistingCourtNumber_shouldReturnCourtNumberAlreadyExistsException() {
 
         // Arrange
@@ -141,7 +129,6 @@ class CourtServiceImplTest {
 
     @Test
     @DisplayName("Create existing Court with non existing surface type")
-    @Order(3)
     void save_inValidDTOWithNonExistingSurfaceTypeId_shouldReturnSurfaceTypeNotFoundException() {
 
         // Arrange
@@ -170,12 +157,8 @@ class CourtServiceImplTest {
                 courtService.save(courtDTO));
     }
 
-
-
-
     @Test
     @DisplayName("Get Court by valid ID")
-    @Order(4)
     void getCourtById_validCourtId_shouldReturnCourtResponseDTO() {
 
         //Arrange
@@ -204,10 +187,8 @@ class CourtServiceImplTest {
         assertEquals(courtResponseDTO, actual, "Should return the same CourtResponseDTO");
     }
 
-
     @Test
     @DisplayName("Get Court by invalid ID")
-    @Order(5)
     void getCourtById_inValidCourtId_shouldReturnCourtNotFoundException() {
 
         //Arrange
@@ -229,10 +210,8 @@ class CourtServiceImplTest {
 
     }
 
-
     @Test
     @DisplayName("Get all existing courts")
-    @Order(6)
     void getAllCourts_shouldReturnAllCourts() {
 
         // Arrange
@@ -272,7 +251,6 @@ class CourtServiceImplTest {
 
     @Test
     @DisplayName("Get all non existing courts")
-    @Order(7)
     void getAllCourts_shouldReturnCourtNotFoundException() {
 
         // Arrange
@@ -287,7 +265,6 @@ class CourtServiceImplTest {
 
     @Test
     @DisplayName("Update existing Court")
-    @Order(8)
     void updateCourt_validCourtDTOAndCourtId_shouldReturnCourtResponseDTO() {
 
         // Arrange
@@ -331,7 +308,6 @@ class CourtServiceImplTest {
 
     @Test
     @DisplayName("Update non existing Court")
-    @Order(9)
     void updateCourt_inValidCourtDTOAndCourtId_shouldReturnCourtNotFoundException() {
 
         // Arrange
@@ -363,7 +339,6 @@ class CourtServiceImplTest {
 
     @Test
     @DisplayName("Update existing Court with non existed surface Type ")
-    @Order(10)
     void updateCourt_inValidCourtDTOWithNonExistedSurfaceTypeId_shouldReturnSurfaceTypeNotFoundException() {
 
         // Arrange
@@ -399,7 +374,6 @@ class CourtServiceImplTest {
 
     @Test
     @DisplayName("Delete Court by ID with existing reservations")
-    @Order(11)
     void deleteCourt_validCourtIdWithReservations_shouldReturnTrue() {
 
         // Arrange
@@ -445,7 +419,6 @@ class CourtServiceImplTest {
 
     @Test
     @DisplayName("Delete non existing Court")
-    @Order(12)
     void deleteCourt_inValidCourtId_shouldReturnCourtNotFoundException() {
 
         // Arrange
@@ -457,9 +430,6 @@ class CourtServiceImplTest {
 
         Reservation reservations2 = new Reservation();
         reservations2.setDeleted(false);
-
-        List<Reservation> reservations = List.of(reservations1,reservations2);
-
 
         Court court = new Court();
         court.setId(courtId);
@@ -486,10 +456,8 @@ class CourtServiceImplTest {
 
     }
 
-
     @Test
     @DisplayName("Delete existing Court with no reservations")
-    @Order(12)
     void deleteCourt_validCourtIdWithAndNoExistedReservations_shouldReturnCourtNotFoundException() {
 
         // Arrange

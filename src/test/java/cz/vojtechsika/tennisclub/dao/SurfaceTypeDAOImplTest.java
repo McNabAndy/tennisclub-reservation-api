@@ -1,7 +1,6 @@
 package cz.vojtechsika.tennisclub.dao;
 
 import cz.vojtechsika.tennisclub.entity.SurfaceType;
-import cz.vojtechsika.tennisclub.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.DisplayName;

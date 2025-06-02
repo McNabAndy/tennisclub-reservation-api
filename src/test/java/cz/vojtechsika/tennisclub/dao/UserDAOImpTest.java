@@ -3,7 +3,6 @@ package cz.vojtechsika.tennisclub.dao;
 import cz.vojtechsika.tennisclub.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -79,7 +78,6 @@ class UserDAOImpTest {
 
         // Arrange
         String phone = "123456789";
-        User user = new User();
         List<User> users = List.of();
 
         when(entityManager.createQuery(anyString(), eq(User.class))).thenReturn(query);

@@ -69,7 +69,6 @@ class CourtDAOImplTest {
 
     }
 
-
     @Test
     @DisplayName("Fetch court by invalid id")
     void findById_inValidId_returnOptional() {
@@ -91,7 +90,6 @@ class CourtDAOImplTest {
 
     }
 
-
     @Test
     @DisplayName("Fetch court by court number")
     void findByCourtNumber_validCourNumber_returnCourtFromDatabase() {
@@ -110,7 +108,6 @@ class CourtDAOImplTest {
         // Assert
         assertTrue(actual.isPresent(), "Court should be found");
     }
-
 
     @Test
     @DisplayName("Fetch court by invalid court number")
@@ -190,7 +187,6 @@ class CourtDAOImplTest {
         assertEquals(surfaceType, actual.get(1).getSurfaceType(),"Object should be the same");
 
     }
-
 
     @Test
     @DisplayName("Update court")

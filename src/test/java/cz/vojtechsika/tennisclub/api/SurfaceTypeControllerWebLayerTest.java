@@ -7,7 +7,6 @@ import cz.vojtechsika.tennisclub.dto.response.SurfaceTypeResponseDTO;
 import cz.vojtechsika.tennisclub.exception.SurfaceTypeNotFoundException;
 import cz.vojtechsika.tennisclub.service.SurfaceTypeService;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,10 +29,10 @@ import static org.mockito.Mockito.*;
 class SurfaceTypeControllerWebLayerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @MockitoBean
-    SurfaceTypeService surfaceTypeService;
+    private SurfaceTypeService surfaceTypeService;
 
 
     @Autowired
@@ -41,7 +40,6 @@ class SurfaceTypeControllerWebLayerTest {
 
     @Test
     @DisplayName("Surface type can be created")
-    @Order(1)
     void createSurfaceType_validSurfaceTypeDetailsProvided_returnCreatedSurfaceTypeDetail() throws Exception {
 
         // Arrange
@@ -91,7 +89,6 @@ class SurfaceTypeControllerWebLayerTest {
 
     @Test
     @DisplayName("Fetch surface type by valid id")
-    @Order(2)
     void getSurfaceType_fetchSurfaceTypeByValidId_returnDetailOfExistingSurfaceType() throws Exception {
 
         // Arrange
@@ -137,7 +134,6 @@ class SurfaceTypeControllerWebLayerTest {
 
     @Test
     @DisplayName("Fetch surface type by invalid id should return 404")
-    @Order(3)
     void getSurfaceType_fetchSurfaceTypeByInvalidId_return404() throws Exception {
 
         // Arrange
@@ -163,7 +159,6 @@ class SurfaceTypeControllerWebLayerTest {
 
     @Test
     @DisplayName("Fetch All existing surface type")
-    @Order(4)
     void getAllSurfaceTypes_fetchAllSurfaceType_returnListOfSurfaceTypesDetails() throws Exception {
 
         SurfaceTypeResponseDTO surfaceTypeResponseDTO1 = new SurfaceTypeResponseDTO();
@@ -227,7 +222,6 @@ class SurfaceTypeControllerWebLayerTest {
 
     @Test
     @DisplayName("Fetch All non existed surface type should return 404")
-    @Order(5)
     void getAllSurfaceTypes_fetchAllSurfaceTypes_return404() throws Exception {
 
         // Arrange
@@ -250,7 +244,6 @@ class SurfaceTypeControllerWebLayerTest {
 
     @Test
     @DisplayName("Update surface type")
-    @Order(6)
     void updateSurfaceType_validDTOWithValidId_returnUpdateSurfaceTypeDetail() throws Exception {
         // Arrange
         Long surfaceTypeId = 1L;
@@ -302,7 +295,6 @@ class SurfaceTypeControllerWebLayerTest {
 
     @Test
     @DisplayName("Update surface type with invalid id should return 404")
-    @Order(7)
     void updateSurfaceType_validDTOWithInValidId_return404() throws Exception {
         // Arrange
         Long surfaceTypeId = 1L;
@@ -340,7 +332,6 @@ class SurfaceTypeControllerWebLayerTest {
 
     @Test
     @DisplayName("Delete surface type")
-    @Order(8)
     void deleteSurfaceType_validId_returnSuccessMessage() throws Exception {
 
         // Arrange
@@ -375,7 +366,6 @@ class SurfaceTypeControllerWebLayerTest {
 
     @Test
     @DisplayName("Delete surface type by invalid id should return 404")
-    @Order(9)
     void deleteSurfaceType_inValidId_return404() throws Exception {
 
         // Arrange

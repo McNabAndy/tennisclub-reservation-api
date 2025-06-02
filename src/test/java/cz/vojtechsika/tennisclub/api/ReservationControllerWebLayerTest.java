@@ -1,17 +1,15 @@
 package cz.vojtechsika.tennisclub.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.vojtechsika.tennisclub.dto.ReservationDTO;
 import cz.vojtechsika.tennisclub.dto.response.ReservationResponseDTO;
-import cz.vojtechsika.tennisclub.dto.response.SurfaceTypeResponseDTO;
 import cz.vojtechsika.tennisclub.exception.CourtNotFoundException;
 import cz.vojtechsika.tennisclub.exception.ReservationNotFoundException;
 import cz.vojtechsika.tennisclub.exception.ReservationValidationException;
 import cz.vojtechsika.tennisclub.service.ReservationService;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,7 +20,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -43,11 +40,8 @@ class ReservationControllerWebLayerTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
 
-    // nemeli by ty metody mít modifikátor přístupu ?
-
     @Test
     @DisplayName("Fetch reservation by valid id")
-    @Order(1)
     void getReservation_validId_returnReservationDetail() throws Exception {
 
         // Arrange
@@ -95,7 +89,6 @@ class ReservationControllerWebLayerTest {
 
     @Test
     @DisplayName("Fetch reservation by invalid id")
-    @Order(2)
     void getReservation_fetchReservationByInValidId_return404() throws Exception {
 
         // Arrange
@@ -124,7 +117,6 @@ class ReservationControllerWebLayerTest {
 
     @Test
     @DisplayName("Fetch all reservation by valid court number")
-    @Order(3)
     void getReservationByCourtNumber_fetchAllReservationByCourtNumber_returnListOfReservationDetails() throws Exception {
 
         // Arrange
@@ -196,7 +188,6 @@ class ReservationControllerWebLayerTest {
 
     @Test
     @DisplayName("Fetch all reservation by invalid court number should return 404")
-    @Order(4)
     void getReservationByCourtNumber_fetchAllReservationByNonExistCourtNumber_return404() throws Exception {
 
         // Arrange

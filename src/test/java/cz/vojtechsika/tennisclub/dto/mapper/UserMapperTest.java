@@ -2,12 +2,10 @@ package cz.vojtechsika.tennisclub.dto.mapper;
 
 import cz.vojtechsika.tennisclub.dto.ReservationDTO;
 import cz.vojtechsika.tennisclub.entity.User;
-import cz.vojtechsika.tennisclub.enums.GameType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 class UserMapperTest {

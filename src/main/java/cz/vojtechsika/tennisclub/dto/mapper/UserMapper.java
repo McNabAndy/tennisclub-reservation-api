@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 /**
  * UserMapper is responsible for converting data from a {@link ReservationDTO} to a {@link User} entity.
  * This mapper is used when creating or updating a user based on reservation information.
- *
  * When mapping, the {@code phoneNumber} and {@code userName} fields are copied from the DTO,
  * and the {@code deleted} flag is initialized to {@code false}.
  */

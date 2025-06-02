@@ -10,10 +10,8 @@ import java.math.BigDecimal;
 /**
  * SurfaceTypeResponseDTO is a Data Transfer Object used to send surface type details in API responses.
  * It contains the unique identifier, name, and price per minute for a surface type.
- *
  * This DTO is typically constructed by the service layer and returned by REST controllers
  * when a client requests information about surface types.
- *
  * Example JSON representation:
  * <pre>
  * {

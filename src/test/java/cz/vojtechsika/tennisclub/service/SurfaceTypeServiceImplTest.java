@@ -59,7 +59,6 @@ class SurfaceTypeServiceImplTest {
 
         // Set SurfaceDTO mock
         surfaceTypeDTO = new SurfaceTypeDTO(
-                surfaceTypeId,
                 surfaceTypeName,
                 minutePrice
         );

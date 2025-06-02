@@ -13,10 +13,8 @@ import java.math.BigDecimal;
  * ReservationResponseDTO is a Data Transfer Object used to send reservation details in API responses.
  * It contains information about a reservation, including its unique ID, court number, user details,
  * game date and times, game type, price, and creation timestamp.
- *
  * This DTO is typically constructed by the service layer and returned by REST controllers
  * when a client requests information about a reservation.
- *
  * Example JSON representation:
  * <pre>
  * {

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
  * SurfaceTypeMapper is responsible for converting between {@link SurfaceTypeDTO} and {@link SurfaceType} entities,
  * as well as building {@link SurfaceTypeResponseDTO} objects for API responses. It encapsulates the mapping logic
  * for surface type–related data structures.
- *
  * When converting from DTO to entity, the {@code deleted} flag is initialized to {@code false}.
  */
 @Component

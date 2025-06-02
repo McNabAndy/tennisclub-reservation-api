@@ -1,10 +1,8 @@
 package cz.vojtechsika.tennisclub;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
+
 
 /**
  * The entry point for the Tennis Club application. This class bootstraps the Spring Boot context

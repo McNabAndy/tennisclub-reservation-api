@@ -10,10 +10,8 @@ import java.math.BigDecimal;
 /**
  * SurfaceTypeDTO is a Data Transfer Object used to carry surface type data between client requests and the service layer.
  * It contains the unique identifier (if present), name, and price per minute for a surface type.
- *
  * This DTO is typically used in REST controller methods to accept or return JSON input/output when creating,
  * updating, or retrieving surface type entities.
- *
  * Example JSON representation:
  * <pre>
  * {
@@ -30,16 +28,13 @@ import java.math.BigDecimal;
 public class SurfaceTypeDTO {
 
 
-    /**
-     * tady pracuju s ideckem který nepotřebuju zapomenl sem tento atribut odstranut
-     * => mam pak chybu dal v aplikaci, musím proveřit všude kde pracuju s ID surface type
-     */
+
 
     /**
      * The unique identifier of the surface type.
      * This field may be null when creating a new surface type, and populated when performing updates or retrievals.
      */
-    private Long id;
+    //private Long id;
 
     /**
      * The name of the surface type (e.g., "Clay", "Grass").

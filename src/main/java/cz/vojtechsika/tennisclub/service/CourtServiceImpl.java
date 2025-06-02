@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 /**
  * CourtServiceImpl is the service implementation for managing {@link Court} entities.
  * It handles business logic for creating, retrieving, updating, and deleting courts,

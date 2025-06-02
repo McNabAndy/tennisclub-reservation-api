@@ -4,7 +4,6 @@ import cz.vojtechsika.tennisclub.dto.CourtDTO;
 import cz.vojtechsika.tennisclub.dto.response.CourtResponseDTO;
 import cz.vojtechsika.tennisclub.dto.response.SurfaceTypeResponseDTO;
 import cz.vojtechsika.tennisclub.entity.Court;
-import cz.vojtechsika.tennisclub.entity.SurfaceType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

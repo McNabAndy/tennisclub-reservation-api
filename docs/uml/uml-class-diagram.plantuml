@@ -1,0 +1,660 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class ApiErrorDTO {
+  - statusCode: int
+  - timestamp: long
+  - message: String
+  + setMessage(String): void
+  + getStatusCode(): int
+  + setStatusCode(int): void
+  + setTimestamp(long): void
+  + getMessage(): String
+  + getTimestamp(): long
+}
+class Court {
+  - id: Long
+  - deleted: boolean
+  - courtNumber: int
+  - surfaceType: SurfaceType
+  - reservations: List<Reservation>
+  + setCourtNumber(int): void
+  + getCourtNumber(): int
+  + getId(): Long
+  + setDeleted(boolean): void
+  + setId(Long): void
+  + getSurfaceType(): SurfaceType
+  + getReservations(): List<Reservation>
+  + isDeleted(): boolean
+  + setReservations(List<Reservation>): void
+  + setSurfaceType(SurfaceType): void
+}
+class CourtController {
+  - courtService: CourtService
+  + getAllCourts(): ResponseEntity<List<CourtResponseDTO>>
+  + createCourt(CourtDTO): ResponseEntity<CourtResponseDTO>
+  + getCourt(Long): ResponseEntity<CourtResponseDTO>
+  + updateCourt(Long, CourtDTO): ResponseEntity<CourtResponseDTO>
+  + deleteCourt(Long): ResponseEntity<Map<String, String>>
+}
+class CourtControllerWebLayerTest {
+  - objectMapper: ObjectMapper
+  - mockMvc: MockMvc
+  - courtService: CourtService
+  ~ deleteCourt_inValidId_returnSuccessMessage(): void
+  ~ createCourt_inValidDataWithAlreadyExistedCourtNumber_return404(): void
+  ~ getAllCourts_NonExistedCourtsInDatabase_return404(): void
+  ~ createCourt_inValidDataWithNonExistedSurfaceType_return404(): void
+  ~ updateCourt_validCourtNumberAndSurfaceType_returnUpdateCourtDetail(): void
+  ~ getCourt_validId_returnCourtDetail(): void
+  ~ updateCourt_invalidSurfaceType_return404(): void
+  ~ deleteCourt_validId_returnSuccessMessage(): void
+  ~ updateCourt_invalidCourtNumber_return404(): void
+  ~ getCourt_inValidId_return404(): void
+  ~ getAllCourts_returnAllExistedCourtsDetail(): void
+  ~ createCourt_validData_returnCourtDetail(): void
+}
+interface CourtDAO << interface >> {
+  + save(Court): Court
+  + update(Court): Court
+  + findAllBySurfaceTypeId(Long): List<Court>
+  + findById(Long): Optional<Court>
+  + findByCourtNumber(int): Optional<Court>
+  + findAll(): List<Court>
+}
+class CourtDAOImpl {
+  - entityManager: EntityManager
+  + save(Court): Court
+  + findByCourtNumber(int): Optional<Court>
+  + findAll(): List<Court>
+  + findAllBySurfaceTypeId(Long): List<Court>
+  + update(Court): Court
+  + findById(Long): Optional<Court>
+}
+class CourtDAOImplTest {
+  - courtDAO: CourtDAOImpl
+  - entityManager: EntityManager
+  - query: TypedQuery<Court>
+  ~ findById_validId_returnCourtFromDatabase(): void
+  ~ findByCourtNumber_inValidCourNumber_returnOptional(): void
+  ~ save_returnSavedNewCourtFromDatabase(): void
+  ~ update_returnUpdatedCourtFromDatabase(): void
+  ~ findAllBySurfaceTypeId_validSurfaceTypeId_returnCourtFromDatabase(): void
+  ~ findAll_returnCourtFromDatabase(): void
+  ~ findByCourtNumber_validCourNumber_returnCourtFromDatabase(): void
+  ~ findById_inValidId_returnOptional(): void
+}
+class CourtDTO {
+  - courtNumber: int
+  - surfaceTypeId: Long
+  + getCourtNumber(): int
+  + setSurfaceTypeId(Long): void
+  + setCourtNumber(int): void
+  + getSurfaceTypeId(): Long
+}
+class CourtMapper {
+  + toEntity(CourtDTO): Court
+  + toResponseDTO(Court, SurfaceTypeResponseDTO): CourtResponseDTO
+}
+class CourtMapperTest {
+  - courtMapper: CourtMapper
+  ~ setUp(): void
+  ~ toResponseDTO(): void
+  ~ toEntity(): void
+}
+class CourtNotFoundException
+class CourtNumberAlreadyExistsException
+class CourtResponseDTO {
+  - courtNumber: int
+  - id: Long
+  - surfaceTypeResponseDTO: SurfaceTypeResponseDTO
+  + getCourtNumber(): int
+  + setSurfaceTypeResponseDTO(SurfaceTypeResponseDTO): void
+  + getSurfaceTypeResponseDTO(): SurfaceTypeResponseDTO
+  + getId(): Long
+  + setCourtNumber(int): void
+  + setId(Long): void
+}
+interface CourtService << interface >> {
+  + getCourtById(Long): CourtResponseDTO
+  + updateCourt(CourtDTO, Long): CourtResponseDTO
+  + deleteCourt(Long): void
+  + save(CourtDTO): CourtResponseDTO
+  + getAllCourts(): List<CourtResponseDTO>
+}
+class CourtServiceImpl {
+  - courtMapper: CourtMapper
+  - surfaceTypeDAO: SurfaceTypeDAO
+  - courtDAO: CourtDAO
+  - surfaceTypeMapper: SurfaceTypeMapper
+  - reservationDAO: ReservationDAO
+  + save(CourtDTO): CourtResponseDTO
+  + getAllCourts(): List<CourtResponseDTO>
+  + deleteCourt(Long): void
+  + updateCourt(CourtDTO, Long): CourtResponseDTO
+  + getCourtById(Long): CourtResponseDTO
+}
+class CourtServiceImplTest {
+  - reservationDAO: ReservationDAO
+  - courtService: CourtServiceImpl
+  - courtDAO: CourtDAO
+  - surfaceTypeDAO: SurfaceTypeDAO
+  - courtMapper: CourtMapper
+  - surfaceTypeMapper: SurfaceTypeMapper
+  ~ getAllCourts_shouldReturnAllCourts(): void
+  ~ save_inValidDTOWithExistingCourtNumber_shouldReturnCourtNumberAlreadyExistsException(): void
+  ~ save_inValidDTOWithNonExistingSurfaceTypeId_shouldReturnSurfaceTypeNotFoundException(): void
+  ~ deleteCourt_inValidCourtId_shouldReturnCourtNotFoundException(): void
+  ~ getCourtById_validCourtId_shouldReturnCourtResponseDTO(): void
+  ~ deleteCourt_validCourtIdWithAndNoExistedReservations_shouldReturnCourtNotFoundException(): void
+  ~ getAllCourts_shouldReturnCourtNotFoundException(): void
+  ~ updateCourt_inValidCourtDTOWithNonExistedSurfaceTypeId_shouldReturnSurfaceTypeNotFoundException(): void
+  ~ save_validCourtDTO_shouldCreateNewCourt(): void
+  ~ updateCourt_inValidCourtDTOAndCourtId_shouldReturnCourtNotFoundException(): void
+  ~ getCourtById_inValidCourtId_shouldReturnCourtNotFoundException(): void
+  ~ deleteCourt_validCourtIdWithReservations_shouldReturnTrue(): void
+  ~ updateCourt_validCourtDTOAndCourtId_shouldReturnCourtResponseDTO(): void
+}
+class DataInitializer {
+  - jdbc: JdbcTemplate
+  - initData: boolean
+  + setJdbc(JdbcTemplate): void
+  + run(String[]): void
+  + getJdbc(): JdbcTemplate
+  + isInitData(): boolean
+  + setInitData(boolean): void
+}
+class DataInitializerTest {
+  ~ jdbc: JdbcTemplate
+  ~ dataInitializer: DataInitializer
+  ~ run_initDataTrue_runInitializeProcess(): void
+  ~ run_initDataFalse_runInitializeProcessIsOff(): void
+}
+enum GameType << enumeration >> {
+  + SINGLES: 
+  + DOUBLES: 
+  + valueOf(String): GameType
+  + values(): GameType[]
+}
+class GlobalExceptionHandler {
+  + handleCourException(RuntimeException): ResponseEntity<ApiErrorDTO>
+  + handleUserException(RuntimeException): ResponseEntity<ApiErrorDTO>
+  + handleReservationException(RuntimeException): ResponseEntity<ApiErrorDTO>
+  + handleSurfaceTypeException(SurfaceTypeNotFoundException): ResponseEntity<ApiErrorDTO>
+}
+class Reservation {
+  - price: BigDecimal
+  - user: User
+  - startTime: LocalDateTime
+  - createdAt: LocalDateTime
+  - gameType: GameType
+  - id: Long
+  - court: Court
+  - endTime: LocalDateTime
+  - deleted: boolean
+  + getGameType(): GameType
+  + getId(): Long
+  + setId(Long): void
+  + getPrice(): BigDecimal
+  + setStartTime(LocalDateTime): void
+  + getEndTime(): LocalDateTime
+  + getCourt(): Court
+  + setCreatedAt(LocalDateTime): void
+  + setGameType(GameType): void
+  + getStartTime(): LocalDateTime
+  + isDeleted(): boolean
+  + setPrice(BigDecimal): void
+  + getCreatedAt(): LocalDateTime
+  + setDeleted(boolean): void
+  + setUser(User): void
+  + setCourt(Court): void
+  + getUser(): User
+  + setEndTime(LocalDateTime): void
+}
+class ReservationController {
+  - reservationService: ReservationService
+  + getAllReservations(): ResponseEntity<List<ReservationResponseDTO>>
+  + getReservation(Long): ResponseEntity<ReservationResponseDTO>
+  + getReservationByPhoneNumber(String, boolean): ResponseEntity<List<ReservationResponseDTO>>
+  + getReservationByCourtNumber(int): ResponseEntity<List<ReservationResponseDTO>>
+  + createReservation(ReservationDTO): ResponseEntity<ReservationResponseDTO>
+  + deleteReservation(Long): ResponseEntity<Map<String, String>>
+  + updateReservation(Long, ReservationDTO): ResponseEntity<ReservationResponseDTO>
+}
+class ReservationControllerWebLayerTest {
+  - objectMapper: ObjectMapper
+  - mockMvc: MockMvc
+  - reservationService: ReservationService
+  ~ getReservation_validId_returnReservationDetail(): void
+  ~ updateReservation_validData_returnUpdatedReservationDetail(): void
+  ~ updateReservation_inValidCourtNumber_return404(): void
+  ~ getReservation_fetchReservationByInValidId_return404(): void
+  ~ getAllReservations_FetchAllReservation_returnListOfAllReservationsDetails(): void
+  ~ createReservation_validData_returnNewReservationDetail(): void
+  ~ getReservationByPhoneNumber_fetchAllFutureReservationByInValidPhoneNumber_retur404(): void
+  ~ getReservationByPhoneNumber_fetchAllPastReservationByInValidPhoneNumber_return404(): void
+  ~ getReservationByCourtNumber_fetchAllReservationByCourtNumber_returnListOfReservationDetails(): void
+  ~ updateReservation_withInValidReservationDateTime_return404(): void
+  ~ getReservationByCourtNumber_fetchAllReservationByNonExistCourtNumber_return404(): void
+  ~ getReservationByPhoneNumber_fetchAllFutureReservationByValidPhoneNumber_returnListOfReservationDetails(): void
+  ~ deleteReservation_inValidId_return404(): void
+  ~ createReservation_invalidCourtNumber_return404(): void
+  ~ deleteReservation_validId_returnSuccessMessage(): void
+  ~ getReservationByPhoneNumber_fetchAllPastReservationByValidPhoneNumber_returnListOfReservationDetails(): void
+  ~ getAllReservations_FetchAllNonExistReservation_return404(): void
+  ~ createReservation_withInValidReservationDateTime_return404(): void
+}
+interface ReservationDAO << interface >> {
+  + findAll(): List<Reservation>
+  + update(Reservation): Reservation
+  + findById(Long): Optional<Reservation>
+  + findAllByDateAndCourtNumber(LocalDateTime, int, Long): List<Reservation>
+  + findAllByPhoneNumber(String, boolean): List<Reservation>
+  + findAllByCourtNumber(int): List<Reservation>
+  + create(Reservation): Reservation
+}
+class ReservationDAOImpl {
+  - entityManager: EntityManager
+  + findAllByPhoneNumber(String, boolean): List<Reservation>
+  + findAllByDateAndCourtNumber(LocalDateTime, int, Long): List<Reservation>
+  + update(Reservation): Reservation
+  + create(Reservation): Reservation
+  + findAll(): List<Reservation>
+  + findById(Long): Optional<Reservation>
+  + findAllByCourtNumber(int): List<Reservation>
+}
+class ReservationDAOImplTest {
+  - entityManager: EntityManager
+  - reservationDAO: ReservationDAOImpl
+  - query: TypedQuery<Reservation>
+  ~ findAllByCourtNumber_validCourtNumber_returnListOfReservationsFromDatabase(): void
+  ~ create_returnSavedReservationEntityFromDatabase(): void
+  ~ findAllByDateAndCourtNumber_validCourtNumberExcludeItself_returnListOfReservationsFromDatabaseExcludeItself(): void
+  ~ findAllByDateAndCourtNumber_validDateAndCourtNumber_returnListOfReservationsFromDatabase(): void
+  ~ findById_inValidId_returnOptional(): void
+  ~ findAllByPhoneNumber_validPhoneNumber_returnListOfReservationsFromDatabase(): void
+  ~ findById_validId_returnReservationFromDatabase(): void
+  ~ update(): void
+  ~ findAll_returnListOfReservationsFromDatabase(): void
+  ~ findAllByPhoneNumber_validPhoneNumberFutureOnly_returnListOfReservationsFromDatabase(): void
+}
+class ReservationDTO {
+  - phoneNumber: String
+  - gameType: GameType
+  - endTime: LocalDateTime
+  - userName: String
+  - courtNumber: int
+  - startTime: LocalDateTime
+  + getCourtNumber(): int
+  + getGameType(): GameType
+  + setCourtNumber(int): void
+  + getUserName(): String
+  + setUserName(String): void
+  + getPhoneNumber(): String
+  + setEndTime(LocalDateTime): void
+  + getEndTime(): LocalDateTime
+  + getStartTime(): LocalDateTime
+  + setStartTime(LocalDateTime): void
+  + setPhoneNumber(String): void
+  + setGameType(GameType): void
+}
+class ReservationMapper {
+  + toReservationResponseDTO(Reservation): ReservationResponseDTO
+  + updateReservationFromDTO(ReservationDTO, Reservation): Reservation
+  + toReservationEntity(ReservationDTO): Reservation
+}
+class ReservationMapperTest {
+  - reservationMapper: ReservationMapper
+  ~ setUp(): void
+  ~ toReservationEntity(): void
+  ~ updateReservationFromDTO_returnUpdatedReservation(): void
+  ~ toReservationResponseDTO(): void
+}
+class ReservationNotFoundException
+class ReservationResponseDTO {
+  - startTime: String
+  - gameType: GameType
+  - price: BigDecimal
+  - userName: String
+  - gameDate: String
+  - id: Long
+  - courtNumber: int
+  - endTime: String
+  - createdAt: String
+  - phoneNumber: String
+  + getId(): Long
+  + setId(Long): void
+  + setGameDate(String): void
+  + getGameDate(): String
+  + getGameType(): GameType
+  + getEndTime(): String
+  + getStartTime(): String
+  + getPrice(): BigDecimal
+  + getCreatedAt(): String
+  + getCourtNumber(): int
+  + setPhoneNumber(String): void
+  + getPhoneNumber(): String
+  + setUserName(String): void
+  + setEndTime(String): void
+  + setGameType(GameType): void
+  + setCourtNumber(int): void
+  + setCreatedAt(String): void
+  + getUserName(): String
+  + setPrice(BigDecimal): void
+  + setStartTime(String): void
+}
+interface ReservationService << interface >> {
+  + getAllReservations(): List<ReservationResponseDTO>
+  + getReservationByCourtNumber(int): List<ReservationResponseDTO>
+  + getReservationByPhoneNumber(String, boolean): List<ReservationResponseDTO>
+  + deleteReservation(Long): void
+  + getReservationById(Long): ReservationResponseDTO
+  + updateReservation(ReservationDTO, Long): ReservationResponseDTO
+  + createReservation(ReservationDTO): ReservationResponseDTO
+}
+class ReservationServiceImpl {
+  - reservationMapper: ReservationMapper
+  - userMapper: UserMapper
+  - courtDAO: CourtDAO
+  - reservationDAO: ReservationDAO
+  - userDAO: UserDAO
+  + deleteReservation(Long): void
+  + updateReservation(ReservationDTO, Long): ReservationResponseDTO
+  + getAllReservations(): List<ReservationResponseDTO>
+  - isTwoHoursLimit(LocalDateTime, LocalDateTime): boolean
+  + getReservationById(Long): ReservationResponseDTO
+  - isInFuture(LocalDateTime): boolean
+  - getOrCreateUser(ReservationDTO): User
+  - findCourtByCourtNumber(int): Court
+  - courtPriceCalculator(Court, ReservationDTO): BigDecimal
+  + getReservationByCourtNumber(int): List<ReservationResponseDTO>
+  - isValidReservation(LocalDateTime, LocalDateTime, List<Reservation>): boolean
+  - isValidReservationInterval(LocalDateTime, LocalDateTime): boolean
+  - getDurationInMinutes(LocalDateTime, LocalDateTime): Long
+  + getReservationByPhoneNumber(String, boolean): List<ReservationResponseDTO>
+  - hasOverlappingReservation(LocalDateTime, LocalDateTime, List<Reservation>): boolean
+  - findAllReservationsByDateAndCourtNumber(LocalDateTime, int, Long): List<Reservation>
+  + createReservation(ReservationDTO): ReservationResponseDTO
+}
+class ReservationServiceImplTest {
+  - userDAO: UserDAO
+  - courtDAO: CourtDAO
+  ~ reservationService: ReservationServiceImpl
+  - userMapper: UserMapper
+  - reservationDAO: ReservationDAO
+  - reservationMapper: ReservationMapper
+  ~ updateReservation_withValidDateAndTimeAndNonExistReservationById_ShouldReturnReservationNotFoundException(): void
+  ~ getReservationByCourtNumber_inValidCourtNumber_ShouldReturnReservationNotFoundException(): void
+  ~ updateReservation_withValidDTO_ShouldReturnUpdatedReservationResponseDTO(): void
+  ~ createReservation_newReservationForNewUserWithPastDateAndTime_ShouldReturnReservationValidationException(): void
+  ~ getReservationByCourtNumber_validCourtNumber_ShouldReturnReservationResponseDTOList(): void
+  ~ getReservationById_inValidId_ShouldReturnReservationNotFoundException(): void
+  ~ updateReservation_withOverLappingReservation_ShouldReturnReservationValidationException(): void
+  ~ updateReservation_withDateInPast_ShouldReturnReservationValidationException(): void
+  ~ getAllReservations_shouldReturnReservationNotFoundException(): void
+  ~ getReservationById_validId_ShouldReturnReservationResponseDTO(): void
+  ~ deleteReservation_validReservationId_shouldSetDeletedToTrue(): void
+  ~ createReservation_newReservationForNewUserWithInvalidDateAndTime_ShouldReturnReservationValidationException(): void
+  ~ getReservationByPhoneNumber_inValidPhoneNumber_ShouldReturnReservationNotFoundException(): void
+  ~ updateReservation_withInValidDateAndTime_ShouldReturnReservationValidationException(): void
+  ~ getAllReservations_shouldReturnAllReservationsResponseDTO(): void
+  ~ deleteReservation_inValidReservationId_shouldThrowReservationNotFoundException(): void
+  ~ createReservation_newReservationForNewUserWithOverLappingReservations_ShouldReturnReservationValidationException(): void
+  ~ getReservationByPhoneNumber_validPhoneNumber_ShouldReturnReservationNotFoundException(): void
+  ~ createReservation_newReservationForExistingUserWithValidDateAndTime_ShouldReturnNewReservationResponseDTO(): void
+  ~ createReservation_newReservationForNewUserWithValidDateAndTime_ShouldReturnNewReservationResponseDTO(): void
+  ~ createReservation_newReservationForExistingUserWithDifferentNameWithValidDateAndTime_ShouldReturnNewReservationResponseDTO(): void
+}
+class ReservationValidationException
+class SurfaceType {
+  - deleted: boolean
+  - name: String
+  - courts: List<Court>
+  - minutePrice: BigDecimal
+  - id: Long
+  + setCourts(List<Court>): void
+  + getName(): String
+  + setDeleted(boolean): void
+  + setId(Long): void
+  + setMinutePrice(BigDecimal): void
+  + getMinutePrice(): BigDecimal
+  + getCourts(): List<Court>
+  + getId(): Long
+  + setName(String): void
+  + isDeleted(): boolean
+}
+class SurfaceTypeController {
+  - surfaceTypeService: SurfaceTypeService
+  + getSurfaceType(Long): ResponseEntity<SurfaceTypeResponseDTO>
+  + createSurfaceType(SurfaceTypeDTO): ResponseEntity<SurfaceTypeResponseDTO>
+  + deleteSurfaceType(Long): ResponseEntity<Map<String, String>>
+  + getAllSurfaceTypes(): ResponseEntity<List<SurfaceTypeResponseDTO>>
+  + updateSurfaceType(Long, SurfaceTypeDTO): ResponseEntity<SurfaceTypeResponseDTO>
+}
+class SurfaceTypeControllerWebLayerTest {
+  - objectMapper: ObjectMapper
+  - mockMvc: MockMvc
+  - surfaceTypeService: SurfaceTypeService
+  ~ updateSurfaceType_validDTOWithValidId_returnUpdateSurfaceTypeDetail(): void
+  ~ createSurfaceType_validSurfaceTypeDetailsProvided_returnCreatedSurfaceTypeDetail(): void
+  ~ updateSurfaceType_validDTOWithInValidId_return404(): void
+  ~ getSurfaceType_fetchSurfaceTypeByInvalidId_return404(): void
+  ~ deleteSurfaceType_validId_returnSuccessMessage(): void
+  ~ getSurfaceType_fetchSurfaceTypeByValidId_returnDetailOfExistingSurfaceType(): void
+  ~ getAllSurfaceTypes_fetchAllSurfaceType_returnListOfSurfaceTypesDetails(): void
+  ~ getAllSurfaceTypes_fetchAllSurfaceTypes_return404(): void
+  ~ deleteSurfaceType_inValidId_return404(): void
+}
+interface SurfaceTypeDAO << interface >> {
+  + update(SurfaceType): SurfaceType
+  + findById(Long): Optional<SurfaceType>
+  + findAll(): List<SurfaceType>
+  + save(SurfaceType): SurfaceType
+}
+class SurfaceTypeDAOImpl {
+  ~ entityManager: EntityManager
+  + save(SurfaceType): SurfaceType
+  + findById(Long): Optional<SurfaceType>
+  + findAll(): List<SurfaceType>
+  + update(SurfaceType): SurfaceType
+}
+class SurfaceTypeDAOImplTest {
+  - surfaceTypeDAO: SurfaceTypeDAOImpl
+  - entityManager: EntityManager
+  - query: TypedQuery<SurfaceType>
+  ~ update(): void
+  ~ findById_inValidId_returnEmptyOptional(): void
+  ~ findAll_returnListOfSurfaceTypesFromDatabase(): void
+  ~ save_returnSavedSurfaceTypesFromDatabase(): void
+  ~ findById_validId_returnsEntityFromDatabase(): void
+}
+class SurfaceTypeDTO {
+  - name: String
+  - minutePrice: BigDecimal
+  + getMinutePrice(): BigDecimal
+  + setName(String): void
+  + setMinutePrice(BigDecimal): void
+  + getName(): String
+}
+class SurfaceTypeMapper {
+  + toEntity(SurfaceTypeDTO): SurfaceType
+  + toResponseDTO(SurfaceType): SurfaceTypeResponseDTO
+}
+class SurfaceTypeMapperTest {
+  - surfaceTypeMapper: SurfaceTypeMapper
+  ~ toEntity_returnSurfaceType(): void
+  ~ setUp(): void
+  ~ toResponseDTO_returnSurfaceTypeResponseDTO(): void
+}
+class SurfaceTypeNotFoundException
+class SurfaceTypeResponseDTO {
+  - minutePrice: BigDecimal
+  - id: Long
+  - name: String
+  + getMinutePrice(): BigDecimal
+  + getId(): Long
+  + setId(Long): void
+  + setMinutePrice(BigDecimal): void
+  + getName(): String
+  + setName(String): void
+}
+interface SurfaceTypeService << interface >> {
+  + updateSurfaceType(SurfaceTypeDTO, Long): SurfaceTypeResponseDTO
+  + saveSurfaceType(SurfaceTypeDTO): SurfaceTypeResponseDTO
+  + deleteSurfaceType(Long): void
+  + getAllSurfaceTypes(): List<SurfaceTypeResponseDTO>
+  + getSurfaceTypeById(Long): SurfaceTypeResponseDTO
+}
+class SurfaceTypeServiceImpl {
+  - courtDAO: CourtDAO
+  - courtService: CourtService
+  - surfaceTypeMapper: SurfaceTypeMapper
+  - surfaceTypeDAO: SurfaceTypeDAO
+  + getSurfaceTypeById(Long): SurfaceTypeResponseDTO
+  + getAllSurfaceTypes(): List<SurfaceTypeResponseDTO>
+  + saveSurfaceType(SurfaceTypeDTO): SurfaceTypeResponseDTO
+  + updateSurfaceType(SurfaceTypeDTO, Long): SurfaceTypeResponseDTO
+  + deleteSurfaceType(Long): void
+}
+class SurfaceTypeServiceImplTest {
+  - surfaceTypeService: SurfaceTypeServiceImpl
+  - courtDAO: CourtDAO
+  - surfaceTypeDAO: SurfaceTypeDAO
+  - surfaceTypeResponseDTO: SurfaceTypeResponseDTO
+  - surfaceTypeDTO: SurfaceTypeDTO
+  - saveSurfaceType: SurfaceType
+  - surfaceTypeMapper: SurfaceTypeMapper
+  - courtService: CourtService
+  - surfaceType: SurfaceType
+  ~ getSurfaceTypeById_onValidId_shouldReturnSurfaceTypeNotFoundException(): void
+  ~ deleteSurfaceType_invalidSurfaceTypeId_shouldReturnSurfaceTypeNotFoundException(): void
+  ~ updateSurfaceType_withValidSurfaceTypeDTOAndId_shouldReturnSurfaceTypeResponseDTO(): void
+  ~ saveSurfaceType_withValidSurfaceTypeDTO_shouldReturnSurfaceTypeResponseDTO(): void
+  ~ updateSurfaceType_withInvalidId_shouldReturnSurfaceTypeNotFoundException(): void
+  ~ getSurfaceTypeById_validId_shouldReturnSurfaceTypeResponseDTO(): void
+  ~ getAllSurfaceTypes_shouldReturnSurfaceTypeNotFoundException(): void
+  ~ getAllSurfaceTypes_shouldReturnAllSurfaceTypesResponseDTO(): void
+  + setUp(): void
+  ~ deleteSurfaceType_validSurfaceTypeIdAndNoExistedCourts_shouldReturnTrue(): void
+  ~ deleteSurfaceType_validSurfaceTypeIdWithCourts_shouldReturnTrue(): void
+}
+class TennisClubApplication {
+  + main(String[]): void
+}
+class TennisClubApplicationTests {
+  ~ contextLoads(): void
+}
+class User {
+  - id: Long
+  - phoneNumber: String
+  - userName: String
+  - reservations: List<Reservation>
+  - deleted: boolean
+  + getReservations(): List<Reservation>
+  + setReservations(List<Reservation>): void
+  + getPhoneNumber(): String
+  + setUserName(String): void
+  + getId(): Long
+  + getUserName(): String
+  + setPhoneNumber(String): void
+  + setId(Long): void
+  + setDeleted(boolean): void
+  + isDeleted(): boolean
+}
+interface UserDAO << interface >> {
+  + findByPhone(String): Optional<User>
+  + save(User): User
+}
+class UserDAOImp {
+  - entityManager: EntityManager
+  + save(User): User
+  + findByPhone(String): Optional<User>
+}
+class UserDAOImpTest {
+  - entityManager: EntityManager
+  - userDAO: UserDAOImp
+  - query: TypedQuery<User>
+  ~ findByPhone_userDoesNotExists_returnEmptyOptional(): void
+  ~ findByPhone_userExists_returnUsersEntityFromDatabase(): void
+  ~ save_returnSavedUserEntityFromDatabase(): void
+}
+class UserMapper {
+  + mapFromReservationDTO(ReservationDTO): User
+}
+class UserMapperTest {
+  - userMapper: UserMapper
+  ~ setUp(): void
+  ~ mapFromReservationDTO_returnUser(): void
+}
+class UserNotFoundException
+
+Court                             "1" *-[#595959,plain]-> "reservations\n*" Reservation                       
+Court                             "1" *-[#595959,plain]-> "surfaceType\n1" SurfaceType                       
+CourtController                   "1" *-[#595959,plain]-> "courtService\n1" CourtService                      
+CourtControllerWebLayerTest       "1" *-[#595959,plain]-> "courtService\n1" CourtService                      
+CourtDAOImpl                       -[#008200,dashed]-^  CourtDAO                          
+CourtDAOImplTest                  "1" *-[#595959,plain]-> "courtDAO\n1" CourtDAOImpl                      
+CourtMapperTest                   "1" *-[#595959,plain]-> "courtMapper\n1" CourtMapper                       
+CourtResponseDTO                  "1" *-[#595959,plain]-> "surfaceTypeResponseDTO\n1" SurfaceTypeResponseDTO            
+CourtServiceImpl                  "1" *-[#595959,plain]-> "courtDAO\n1" CourtDAO                          
+CourtServiceImpl                  "1" *-[#595959,plain]-> "courtMapper\n1" CourtMapper                       
+CourtServiceImpl                   -[#008200,dashed]-^  CourtService                      
+CourtServiceImpl                  "1" *-[#595959,plain]-> "reservationDAO\n1" ReservationDAO                    
+CourtServiceImpl                  "1" *-[#595959,plain]-> "surfaceTypeDAO\n1" SurfaceTypeDAO                    
+CourtServiceImpl                  "1" *-[#595959,plain]-> "surfaceTypeMapper\n1" SurfaceTypeMapper                 
+CourtServiceImplTest              "1" *-[#595959,plain]-> "courtDAO\n1" CourtDAO                          
+CourtServiceImplTest              "1" *-[#595959,plain]-> "courtMapper\n1" CourtMapper                       
+CourtServiceImplTest              "1" *-[#595959,plain]-> "courtService\n1" CourtServiceImpl                  
+CourtServiceImplTest              "1" *-[#595959,plain]-> "reservationDAO\n1" ReservationDAO                    
+CourtServiceImplTest              "1" *-[#595959,plain]-> "surfaceTypeDAO\n1" SurfaceTypeDAO                    
+CourtServiceImplTest              "1" *-[#595959,plain]-> "surfaceTypeMapper\n1" SurfaceTypeMapper                 
+DataInitializerTest               "1" *-[#595959,plain]-> "dataInitializer\n1" DataInitializer                   
+Reservation                       "1" *-[#595959,plain]-> "court\n1" Court                             
+Reservation                       "1" *-[#595959,plain]-> "gameType\n1" GameType                          
+Reservation                       "1" *-[#595959,plain]-> "user\n1" User                              
+ReservationController             "1" *-[#595959,plain]-> "reservationService\n1" ReservationService                
+ReservationControllerWebLayerTest "1" *-[#595959,plain]-> "reservationService\n1" ReservationService                
+ReservationDAOImpl                 -[#008200,dashed]-^  ReservationDAO                    
+ReservationDAOImplTest            "1" *-[#595959,plain]-> "reservationDAO\n1" ReservationDAOImpl                
+ReservationDTO                    "1" *-[#595959,plain]-> "gameType\n1" GameType                          
+ReservationMapperTest             "1" *-[#595959,plain]-> "reservationMapper\n1" ReservationMapper                 
+ReservationResponseDTO            "1" *-[#595959,plain]-> "gameType\n1" GameType                          
+ReservationServiceImpl            "1" *-[#595959,plain]-> "courtDAO\n1" CourtDAO                          
+ReservationServiceImpl            "1" *-[#595959,plain]-> "reservationDAO\n1" ReservationDAO                    
+ReservationServiceImpl            "1" *-[#595959,plain]-> "reservationMapper\n1" ReservationMapper                 
+ReservationServiceImpl             -[#008200,dashed]-^  ReservationService                
+ReservationServiceImpl            "1" *-[#595959,plain]-> "userDAO\n1" UserDAO                           
+ReservationServiceImpl            "1" *-[#595959,plain]-> "userMapper\n1" UserMapper                        
+ReservationServiceImplTest        "1" *-[#595959,plain]-> "courtDAO\n1" CourtDAO                          
+ReservationServiceImplTest        "1" *-[#595959,plain]-> "reservationDAO\n1" ReservationDAO                    
+ReservationServiceImplTest        "1" *-[#595959,plain]-> "reservationMapper\n1" ReservationMapper                 
+ReservationServiceImplTest        "1" *-[#595959,plain]-> "reservationService\n1" ReservationServiceImpl            
+ReservationServiceImplTest        "1" *-[#595959,plain]-> "userDAO\n1" UserDAO                           
+ReservationServiceImplTest        "1" *-[#595959,plain]-> "userMapper\n1" UserMapper                        
+SurfaceType                       "1" *-[#595959,plain]-> "courts\n*" Court                             
+SurfaceTypeController             "1" *-[#595959,plain]-> "surfaceTypeService\n1" SurfaceTypeService                
+SurfaceTypeControllerWebLayerTest "1" *-[#595959,plain]-> "surfaceTypeService\n1" SurfaceTypeService                
+SurfaceTypeDAOImpl                 -[#008200,dashed]-^  SurfaceTypeDAO                    
+SurfaceTypeDAOImplTest            "1" *-[#595959,plain]-> "surfaceTypeDAO\n1" SurfaceTypeDAOImpl                
+SurfaceTypeMapperTest             "1" *-[#595959,plain]-> "surfaceTypeMapper\n1" SurfaceTypeMapper                 
+SurfaceTypeServiceImpl            "1" *-[#595959,plain]-> "courtDAO\n1" CourtDAO                          
+SurfaceTypeServiceImpl            "1" *-[#595959,plain]-> "courtService\n1" CourtService                      
+SurfaceTypeServiceImpl            "1" *-[#595959,plain]-> "surfaceTypeDAO\n1" SurfaceTypeDAO                    
+SurfaceTypeServiceImpl            "1" *-[#595959,plain]-> "surfaceTypeMapper\n1" SurfaceTypeMapper                 
+SurfaceTypeServiceImpl             -[#008200,dashed]-^  SurfaceTypeService                
+SurfaceTypeServiceImplTest        "1" *-[#595959,plain]-> "courtDAO\n1" CourtDAO                          
+SurfaceTypeServiceImplTest        "1" *-[#595959,plain]-> "courtService\n1" CourtService                      
+SurfaceTypeServiceImplTest        "1" *-[#595959,plain]-> "surfaceType\n1" SurfaceType                       
+SurfaceTypeServiceImplTest        "1" *-[#595959,plain]-> "surfaceTypeDAO\n1" SurfaceTypeDAO                    
+SurfaceTypeServiceImplTest        "1" *-[#595959,plain]-> "surfaceTypeDTO\n1" SurfaceTypeDTO                    
+SurfaceTypeServiceImplTest        "1" *-[#595959,plain]-> "surfaceTypeMapper\n1" SurfaceTypeMapper                 
+SurfaceTypeServiceImplTest        "1" *-[#595959,plain]-> "surfaceTypeResponseDTO\n1" SurfaceTypeResponseDTO            
+SurfaceTypeServiceImplTest        "1" *-[#595959,plain]-> "surfaceTypeService\n1" SurfaceTypeServiceImpl            
+User                              "1" *-[#595959,plain]-> "reservations\n*" Reservation                       
+UserDAOImp                         -[#008200,dashed]-^  UserDAO                           
+UserDAOImpTest                    "1" *-[#595959,plain]-> "userDAO\n1" UserDAOImp                        
+UserMapperTest                    "1" *-[#595959,plain]-> "userMapper\n1" UserMapper                        
+@enduml

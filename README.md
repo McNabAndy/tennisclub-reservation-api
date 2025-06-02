@@ -30,7 +30,11 @@ Data initialization (surfaces and courts) is configurable via `application.prope
 ```
 app.init.data=true
 ```
-
+## Postman collection for testing
+You can access the Postman collection by navigating to the [docs/postman/](docs/postman) folder in the repository (e.g., docs/postman). 
+Make sure to import the JSON file into Postman before running any requests. 
+Additionally, __please note__ that the database __must be populated__ with the necessary data 
+for the API endpoints to function correctly.
 
 # API Endpoints - Surface Type
 

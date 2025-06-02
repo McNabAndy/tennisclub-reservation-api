@@ -21,6 +21,9 @@ This is a basic Spring Boot application for managing tennis court reservations. 
 - Lombok
 - JUnit 5 and Mockito
 
+## UML Diagrams
+UML diagrams of the app are in the path `docs/uml`
+
 ## Notes
 The application uses JPA with custom DAO implementations __no JpaRepository or CrudRepository__.
 Data initialization (surfaces and courts) is configurable via `application.properties` 
